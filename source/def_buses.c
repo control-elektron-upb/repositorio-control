@@ -1,8 +1,9 @@
+
 #include "def_buses.h"
 
 /*
-struct bus_1 bus_can_output;
-struct bus_2 bus_data;
+struct bus_1 bus_data;
+struct bus_2 bus_data_output;
 struct bus_3 bus_can_input;
 */
 

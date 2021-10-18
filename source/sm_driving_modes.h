@@ -1,5 +1,5 @@
 /*
- * File:   sm_driving_modes.c
+ * File:   sm_driving_modes.h
  *
  */
 
