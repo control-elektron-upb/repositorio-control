@@ -62,12 +62,40 @@ enum failures
 	AUTOKILL
 };
 
+enum peripherals_info
+{
+	OK,
+	ERROR
+};
+
+enum inversor_info
+{
+	OK,
+	ERROR
+};
+
+enum bms_info
+{
+	OK,
+	ERROR
+};
+
+enum dcdc_info
+{
+	OK,
+	ERROR
+};
+
 typedef struct bus1
 {
-	uint8_t status_driving_modes;
+	uint8_t driving_modes_state;
+	uint8_t failures_state;
 
-	uint8_t status_failures;
-	
+	enum driving_modes rx_buttons_change_state;		//decodificado
+	enum peripherals_info rx_peripherals_ok;		//decodificado
+	enum inversor_info rx_inversor_ok;				//decodificado
+	enum bms_info rx_bms_ok;						//decodificado
+	enum dcdc_info rx_dcdc_ok;						//decodificado
 
 
 } typedef_bus1;

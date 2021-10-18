@@ -8,6 +8,7 @@
 
 #include <stdint.h>
 
+#include "buses/def_buses.h"
 
 /* estados de la maquina */
 enum 
@@ -18,15 +19,10 @@ enum
     kSPORT
 };
 
-
-/* variables maquina de estados */
-int EV_boton_eco = 0;
-int EV_boton_normal = 0;
-int EV_boton_sport = 0;
+/* variable evento pulsador */
+uint8_t EV_button;
 
 void driving_modes_state_machine(void);
 uint8_t driving_modes_st_leer(void);
-
-
 
 #endif  /* _DRIVING_MODES_ST_H_ */
