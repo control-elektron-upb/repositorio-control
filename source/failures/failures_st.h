@@ -1,5 +1,5 @@
 /*
- * File:   sm_failures.h
+ * File:   failures_st.h
  *
  */
 
@@ -7,6 +7,16 @@
 #define _SM_FAILURES_H_
 #include <stdint.h>
 #include <stdbool.h>
+
+/* rangos de monitoreo de variables */
+#define 
+
+/* Condiciones para CAUTION1
+
+
+
+
+*/
 
 
 // estados de la maquina

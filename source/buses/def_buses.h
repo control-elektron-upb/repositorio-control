@@ -65,6 +65,7 @@ enum failures
 typedef struct bus1
 {
 	uint8_t status_driving_modes;
+
 	uint8_t status_failures;
 	
 
@@ -86,7 +87,6 @@ typedef struct bus2
 {
 	uint8_t  estado_manejo; 			//salida can
 	uint8_t  estado_falla; 				//salida can
-	uint8_t  nivel_velocidad;			//salida can
 	uint8_t  nivel_velocidad;			//salida can
 	uint8_t  nivel_voltaje;				//salida can
 	uint8_t  control_ok;				//salida can
