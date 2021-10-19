@@ -8,7 +8,7 @@
 
 /* ID Transmit */
 #define ID_ESTADO_MANEJO 			0x010
-#define ID_ESTADO FALLA				0x011
+#define ID_ESTADO_FALLA				0x011
 #define ID_NIVEL_VELOCIDAD			0x012
 #define ID_NIVEL_VOLTAJE			0x013
 #define ID_CONTROL_OK				0x014
@@ -47,6 +47,20 @@ BUS 1:
 -Generación de indicadores
 */
 
+typedef struct bus1
+{
+	uint8_t driving_modes_state;
+	uint8_t failures_state;
+
+	enum buttons_states rx_buttons_change_state;	//decodificado
+	enum peripherals_info rx_peripherals_ok;		//decodificado
+	enum inversor_info rx_inversor_ok;				//decodificado
+	enum bms_info rx_bms_ok;						//decodificado
+	enum dcdc_info rx_dcdc_ok;						//decodificado
+
+
+} typedef_bus1;
+
 enum driving_modes
 {
 	ECO,
@@ -60,6 +74,13 @@ enum failures
 	CAUTION1,
 	CAUTION2,
 	AUTOKILL
+};
+
+enum buttons_states
+{
+	ECO,
+	NORMAL,
+	SPORT
 };
 
 enum peripherals_info
@@ -86,27 +107,12 @@ enum dcdc_info
 	ERROR
 };
 
-typedef struct bus1
-{
-	uint8_t driving_modes_state;
-	uint8_t failures_state;
-
-	enum driving_modes rx_buttons_change_state;		//decodificado
-	enum peripherals_info rx_peripherals_ok;		//decodificado
-	enum inversor_info rx_inversor_ok;				//decodificado
-	enum bms_info rx_bms_ok;						//decodificado
-	enum dcdc_info rx_dcdc_ok;						//decodificado
-
-
-} typedef_bus1;
-
-
 /*
 BUS 2:
+-Transmición datos CAN (Envío data asincrono -> CAN)
 -Nivel velocidad inversor
 -Auto kill
 -Envío modo manejo
--Envío data asincrono -> CAN
 -Harvester
 */
 
@@ -130,8 +136,6 @@ typedef struct bus2
 /*
 BUS 3:
 -Recepcion datos CAN
--Parsing de datos (Decodificación data <- CAN)
--Harvester
 */
 
 typedef struct bus3
