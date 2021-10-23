@@ -155,7 +155,7 @@ typedef struct bus3
 	
 	uint8_t  t_max;						//can 0x32
 	uint8_t  dcdc_ok;					//can
-	uint8_t  velocidad					//can
+	uint8_t  velocidad;					//can
 	uint8_t  V;							//can
 	uint8_t  I;							//can
 	uint8_t  temp_max;					//can
