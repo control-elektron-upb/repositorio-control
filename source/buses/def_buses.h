@@ -58,6 +58,21 @@ typedef struct bus1
 	enum bms_info rx_bms_ok;						//decodificado
 	enum dcdc_info rx_dcdc_ok;						//decodificado
 
+	uint8_t  rx_voltaje_bms;						//can
+	uint8_t  rx_corriente_bms;						//can
+	uint8_t  rx_voltaje_min_celda_bms;				//can
+	uint8_t  rx_potencia_bms;						//can
+	uint8_t  rx_t_max_bms;							//can 0x24
+	uint8_t  rx_nivel_bateria_bms;					//can
+	uint8_t  rx_voltaje_bateria_dcdc;				//can
+	uint8_t  rx_t_max_dcdc;							//can 0x32
+	uint8_t  rx_velocidad_inv;							//can
+	uint8_t  rx_temp_inv;				//can
+	uint8_t  rx_V_inv;							//can
+	uint8_t  rx_I_inv;							//can
+	uint8_t  rx_temp_max_inv;					//can
+	uint8_t  rx_temp_motor_inv;				//can
+	uint8_t  rx_potencia_inv;					//can
 
 } typedef_bus1;
 

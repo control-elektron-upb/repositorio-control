@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "VARIABLE_MONITORING/Variable_monitoring.h"
+#include "variable_monitoring/Variable_monitoring.h"
 
 
 /* 
@@ -10,32 +10,62 @@ S3: mal > max bien min > bien
 
 
 */
+uint8_t voltaje_bms_state;
+uint8_t corriente_bms_state;						
+uint8_t voltaje_min_celda_bms_state;				
+uint8_t potencia_bms_state;						
+uint8_t t_max_bms_state;							
+uint8_t nivel_bateria_bms_state;					
+uint8_t voltaje_bateria_dcdc_state;				
+uint8_t t_max_dcdc_state;							
+uint8_t velocidad_inv_state;						
+uint8_t temp_inv_state;							
+uint8_t V_inv_state;								
+uint8_t I_inv_state;								
+uint8_t temp_max_inv_state;						
+uint8_t temp_motor_inv_state;					
+uint8_t potencia_inv_state;	
+
+int regular_zone = 0.05; //+-5% de zona en regular
+
+void variable_monitoring (void){
 
 
 
-
-
-
-if((rx.OK_BMS==error)|(rx.OK_DCDC==error)|(rx.OK_INV==error)){
-    return 0;//encia algo  de este tipo dado el caso del condicional
-}else{
 /////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-switch (VOLTAJE_BMS)//S1
-{
+switch (voltaje_bms_state){
     //un caso para cuando el bms aun no este encendido y no se consuma cpu haciendo comprobaciones
 
-case OK: /* constant-expression */:
+case OK: /* constant-expression */
     /* code */
-    if((rx.voltaje_BMS > V_MAX_BMS) | (rx.voltaje_BMS < V_MIN_BMS)){
-        VOLTAJE_BMS = PROBLEM; 
+    if((bus_data.rx_voltaje_bms > (V_MAX_BMS * (regular_zone + 1))) | (bus_data.rx_voltaje_bms < (V_MIN_BMS*(-regular_zone + 1)))) {
+        voltaje_bms_state = PROBLEM; 
+
+    }else if(((bus_data.rx_voltaje_bms < (V_MAX_BMS * (regular_zone + 1))) & (bus_data.rx_voltaje_bms > (V_MAX_BMS * (-regular_zone + 1))))  | 
+      ((bus_data.rx_voltaje_bms > (V_MIN_BMS*(-regular_zone + 1))) & (bus_data.rx_voltaje_bms < (V_MIN_BMS*(regular_zone + 1))))){
+        voltaje_bms_state = REGULAR; 
+
+    }else{
+        voltaje_bms_state =  DATA_PROBLEM;
+
     }
+ 
+    break;
 case PROBLEM:
 
-    if((rx.voltaje_BMS < V_MAX_BMS) | (rx.voltaje_BMS > V_MIN_BMS)){
-        VOLTAJE_BMS = OK; 
-    } 
+    if((bus_data.rx_voltaje_bms < (V_MAX_BMS * (-regular_zone + 1))) & (bus_data.rx_voltaje_bms > (V_MIN_BMS*(regular_zone + 1)))) {
+        voltaje_bms_state = OK; 
+
+    }else if(((bus_data.rx_voltaje_bms < (V_MAX_BMS * (regular_zone + 1))) & (bus_data.rx_voltaje_bms > (V_MAX_BMS * (-regular_zone + 1))))  | 
+      ((bus_data.rx_voltaje_bms > (V_MIN_BMS*(-regular_zone + 1))) & (bus_data.rx_voltaje_bms < (V_MIN_BMS*(regular_zone + 1))))){
+        voltaje_bms_state = REGULAR; 
+
+    }else{
+        voltaje_bms_state =  DATA_PROBLEM;
+
+    }
     break;
 
 default:
@@ -44,296 +74,39 @@ default:
 /////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-switch (CORRIENTE_BMS)//S1
-{
-case OK: /* constant-expression */:
+switch (corriente_bms_state){
+
+case OK: /* constant-expression */
     /* code */
-    if((rx.corriente_BMS > I_MAX_BMS) | (rx.corriente_BMS < I_MIN_BMS)){
-        CORRIENTE_BMS = PROBLEM; 
+    if((bus_data.rx_corriente_bms > (I_MAX_BMS * (regular_zone + 1))) | (bus_data.rx_corriente_bms < (I_MIN_BMS*(-regular_zone + 1)))) {
+        corriente_bms_state = PROBLEM; 
+
+    }else if(((bus_data.rx_corriente_bms < (I_MAX_BMS * (regular_zone + 1))) & (bus_data.rx_corriente_bms > (I_MAX_BMS * (-regular_zone + 1))))  | 
+      ((bus_data.rx_corriente_bms > (I_MIN_BMS*(-regular_zone + 1))) & (bus_data.rx_corriente_bms < (I_MIN_BMS*(regular_zone + 1))))){
+        corriente_bms_state = REGULAR; 
+
+    }else{
+        corriente_bms_state =  DATA_PROBLEM;
+
     }
+ 
+    break;
 case PROBLEM:
 
-    if((rx.corriente_BMS < I_MAX_BMS) | (rx.corriente_BMS > I_MIN_BMS)){
-        CORRIENTE_BMS = OK; 
-    } 
+    if((bus_data.rx_corriente_bms < (I_MAX_BMS * (-regular_zone + 1))) & (bus_data.rx_corriente_bms > (I_MIN_BMS*(regular_zone + 1)))) {
+        corriente_bms_state = OK; 
+
+    }else if(((bus_data.rx_corriente_bms < (I_MAX_BMS * (regular_zone + 1))) & (bus_data.rx_corriente_bms > (I_MAX_BMS * (-regular_zone + 1))))  | 
+      ((bus_data.rx_corriente_bms > (I_MIN_BMS*(-regular_zone + 1))) & (bus_data.rx_corriente_bms < (I_MIN_BMS*(regular_zone + 1))))){
+        corriente_bms_state = REGULAR; 
+
+    }else{
+        corriente_bms_state =  DATA_PROBLEM;
+
+    }
     break;
 
 default:
     break;
 }
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-switch (V_MIN_CELDA_BMS)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.corriente_BMS > I_MAX_BMS) | (rx.corriente_BMS < I_MIN_BMS)){
-        CORRIENTE_BMS = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.corriente_BMS < I_MAX_BMS) | (rx.corriente_BMS > I_MIN_BMS)){
-        CORRIENTE_BMS = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (POTENCIA_BMS)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.potencia_BMS > P_MAX_BMS) | (rx.potencia_BMS < P_MIN_BMS)){
-        POTENCIA_BMS = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.potencia_BMS < P_MAX_BMS) | (rx.potencia_BMS > P_MIN_BMS)){
-        POTENCIA_BMS = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-    
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (T_BMS)//S3
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.t_BMS > T_MAX_BMS){
-        T_BMS = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.t_BMS < T_MAX_BMS){
-        T_BMS = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (NIV_BATERIA_BMS)//S2
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.niv_bat_BMS < NIV_BAT_MIN_BMS){
-        NIV_BATERIA_BMS = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.niv_bat_BMS > NIV_BAT_MIN_BMS){
-       NIV_BATERIA_BMS = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (V_BATERIA_DCDC)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.v_bateria_dcdc > V_BAT_MAX_DCDC) | (rx.v_bateria_dcdc <  V_BAT_MIN_DCDC){
-        V_BATERIA_DCDC = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.v_bateria_dcdc < V_BAT_MAX_DCDC) | (rx.v_bateria_dcdc > V_BAT_MIN_DCDC)){
-        V_BATERIA_DCDC = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (T_DCDC)//S3
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.t_DCDC > T_MAX_DCDC){
-        T_DCDC = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.t_DCDC < T_MAX_DCDC){
-        T_DCDC = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (VELOCIDAD_MOTOR)//S3
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.velocidad_MOTOR > VEL_MAX_MOTOR){
-        VELOCIDAD_MOTOR = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.velocidad_MOTOR < VEL_MAX_MOTOR){
-        VELOCIDAD_MOTOR = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (T_MOTOR)//S3
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.t_motor > T_MAX_MOTOR){
-       T_MOTOR = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.t_motor < T_MAX_MOTOR){
-        T_MOTOR = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (VOLTAJE_INV)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.voltaje_INV > V_MAX_INV) | (rx.voltaje_INV <  V_MIN_INV)){
-        VOLTAJE_INV = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.voltaje_INV < V_MAX_INV) | (rx.voltaje_INV > V_MIN_INV)){
-        VOLTAJE_INV = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (CORRIENTE_INV)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.corriente_INV > I_MAX_INV) | (rx.corriente_INV <  I_MIN_INV)){
-        CORRIENTE_INV = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.corriente_INV < I_MAX_INV) | (rx.corriente_INV > I_MIN_INV)){
-        CORRIENTE_INV = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-    
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (T_INV)//S3
-{
-case OK: /* constant-expression */:
-    /* code */
-    if(rx.t_INV > T_MAX_INV){
-       T_INV = PROBLEM; 
-    }
-case PROBLEM:
-
-    if(rx.t_INV < T_MAX_INV){
-        T_INV = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-switch (POTENCIA_INV)//S1
-{
-case OK: /* constant-expression */:
-    /* code */
-    if((rx.potencia_INV > P_MAX_INV) | (rx.potencia_INV <  P_MIN_INV)){
-        POTENCIA_INV = PROBLEM; 
-    }
-case PROBLEM:
-
-    if((rx.potencia_INV < P_MAX_INV) | (rx.potencia_INV > P_MIN_INV)){
-        POTENCIA_INV = OK; 
-    } 
-    break;
-
-default:
-    break;
-    }
-
-
-
-
-    }
+}
