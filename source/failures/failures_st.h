@@ -3,13 +3,13 @@
  *
  */
 
-#ifndef _SM_FAILURES_H_
-#define _SM_FAILURES_H_
-#include <stdint.h>
-#include <stdbool.h>
+#ifndef _FAILURES_ST_H_
+#define _FAILURES_ST_H_
+
+#include "buses/def_buses.h"
 
 /* rangos de monitoreo de variables */
-#define 
+
 
 /* Condiciones para CAUTION1
 
@@ -22,13 +22,13 @@
 // estados de la maquina
 enum failures
 {
-	OK=0,
-	CAUTION1,
-	CAUTION2,
-	AUTOKILL
+	kOK=0,
+	kCAUTION1,
+	kCAUTION2,
+	kAUTOKILL
 };
 
 // variables maquina de estados fallas
 char estado_fallas = OK;             //variable de estados inicializada en OK
  
-#endif  /* _SM_FAILURES_H_ */
+#endif  /* _FAILURES_ST_H_ */
