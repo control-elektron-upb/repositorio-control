@@ -6,14 +6,12 @@
 #ifndef _DRIVING_MODES_ST_H_
 #define _DRIVING_MODES_ST_H_
 
-#include <stdint.h>
-
 #include "buses/def_buses.h"
 
 /* estados de la maquina */
 enum 
 {
-    kINIT = 0,
+    kINIT=0,
     kECO,
     kNORMAL,
     kSPORT
