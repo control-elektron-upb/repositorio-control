@@ -1,6 +1,7 @@
 
 #ifndef _DEF_BUSES_H_
 #define _DEF_BUSES_H_
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -18,22 +19,25 @@
 #define ID_DEAD_MAN					0x003
 #define ID_BUTTONS_CHANGE_STATE		0x004
 #define ID_PERIPHERALS_OK			0x005
+
 #define ID_VOLTAJE_BMS				0x020	// 0-210 -> 0-4.2
 #define	ID_CORRIENTE_BMS			0x021	// 0-255 -> 0-60
-#define ID_VOLTAJE_MIN_CELDA 		0x022	
+#define ID_VOLTAJE_MIN_CELDA_BMS 	0x022	
 #define ID_POTENCIA_BMS				0x023	// 0-255 -> 0-2550
-#define ID_T_MAX					0x024
-#define	ID_NIVEL_BATERIA			0x025	// 0-200 -> 0-100
+#define ID_T_MAX_BMS				0x024
+#define	ID_NIVEL_BATERIA_BMS		0x025	// 0-200 -> 0-100
 #define ID_BMS_OK					0x026
-#define ID_VOLTAJE_BATERIA			0x030
-#define ID_T_MAX					0x032
+
+#define ID_VOLTAJE_BATERIA_DCDC		0x030
+#define ID_T_MAX_DCDC				0x032
 #define ID_DCDC_OK					0x033
-#define ID_VELOCIDAD				0x040	// 0-240 -> 0-60
-#define ID_V						0x041
-#define ID_I						0x042
-#define ID_TEMP_MAX					0x043
-#define ID_TEMP_MOTOR				0x044
-#define ID_POTENCIA					0x045
+
+#define ID_VELOCIDAD_INV			0x040	// 0-240 -> 0-60
+#define ID_V_INV					0x041
+#define ID_I_INV					0x042
+#define ID_TEMP_MAX_INV				0x043
+#define ID_TEMP_MOTOR_INV			0x044
+#define ID_POTENCIA_INV				0x045
 #define ID_INVERSOR_OK				0x046
 
 
@@ -49,47 +53,32 @@ BUS 1:
 
 typedef struct bus1
 {
+	/* variables de estados de maquinas */
 	uint8_t driving_modes_state;
 	uint8_t failures_state;
 
-	enum buttons_states rx_buttons_change_state;	//decodificado
-	enum peripherals_info rx_peripherals_ok;		//decodificado
-	enum inversor_info rx_inversor_ok;				//decodificado
-	enum bms_info rx_bms_ok;						//decodificado
-	enum dcdc_info rx_dcdc_ok;						//decodificado
-
-	uint8_t  rx_voltaje_bms;						//can
-	uint8_t  rx_corriente_bms;						//can
-	uint8_t  rx_voltaje_min_celda_bms;				//can
-	uint8_t  rx_potencia_bms;						//can
-	uint8_t  rx_t_max_bms;							//can 0x24
-	uint8_t  rx_nivel_bateria_bms;					//can
-	uint8_t  rx_voltaje_bateria_dcdc;				//can
-	uint8_t  rx_t_max_dcdc;							//can 0x32
-	uint8_t  rx_velocidad_inv;							//can
-	uint8_t  rx_temp_inv;				//can
-	uint8_t  rx_V_inv;							//can
-	uint8_t  rx_I_inv;							//can
-	uint8_t  rx_temp_max_inv;					//can
-	uint8_t  rx_temp_motor_inv;				//can
-	uint8_t  rx_potencia_inv;					//can
+	/* datos decodificados */
+	enum buttons_states rx_buttons_change_state;
+	enum info rx_peripherals_ok;		
+	enum info rx_inversor_ok;
+	enum info rx_bms_ok;
+	enum info rx_dcdc_ok;
+	uint8_t  rx_voltaje_bms;
+	uint8_t  rx_corriente_bms;
+	uint8_t  rx_voltaje_min_celda_bms;
+	uint8_t  rx_potencia_bms;
+	uint8_t  rx_t_max_bms;
+	uint8_t  rx_nivel_bateria_bms;
+	uint8_t  rx_voltaje_bateria_dcdc;
+	uint8_t  rx_t_max_dcdc;
+	uint8_t  rx_velocidad_inv;
+	uint8_t  rx_V_inv;
+	uint8_t  rx_I_inv;
+	uint8_t  rx_temp_max_inv;
+	uint8_t  rx_temp_motor_inv;
+	uint8_t  rx_potencia_inv;
 
 } typedef_bus1;
-
-enum driving_modes
-{
-	ECO,
-	NORMAL,
-	SPORT
-};
-
-enum failures
-{
-	OK,
-	CAUTION1,
-	CAUTION2,
-	AUTOKILL
-};
 
 enum buttons_states
 {
@@ -98,25 +87,7 @@ enum buttons_states
 	SPORT
 };
 
-enum peripherals_info
-{
-	OK,
-	ERROR
-};
-
-enum inversor_info
-{
-	OK,
-	ERROR
-};
-
-enum bms_info
-{
-	OK,
-	ERROR
-};
-
-enum dcdc_info
+enum info
 {
 	OK,
 	ERROR
@@ -124,9 +95,9 @@ enum dcdc_info
 
 /*
 BUS 2:
--Transmición datos CAN (Envío data asincrono -> CAN)
--Nivel velocidad inversor
--Auto kill
+-Transmisión datos CAN (Envío data asíncrono -> CAN)
+-Envío nivel velocidad inversor
+-Envío Auto kill
 -Envío modo manejo
 -Harvester
 */
@@ -147,6 +118,20 @@ typedef struct bus2
 	} async[LENGTH_ASYNC_MSG];
 } typedef_bus2;
 
+enum driving_modes
+{
+	ECO,
+	NORMAL,
+	SPORT
+};
+
+enum failures
+{
+	OK,
+	CAUTION1,
+	CAUTION2,
+	AUTOKILL
+};
 
 /*
 BUS 3:
@@ -155,28 +140,30 @@ BUS 3:
 
 typedef struct bus3
 {
-	uint8_t  pedal;						//can
-	uint8_t  dead_man;					//can	
-	uint8_t  buttons_change_state;		//can
-	uint8_t  peripherals_ok;			//can
-	uint8_t  voltaje_bms;				//can
-	uint8_t  corriente_bms;				//can
-	uint8_t  voltaje_min_celda;			//can
-	uint8_t  potencia_bms;				//can
-	uint8_t  t_max;						//can 0x24
-	uint8_t  nivel_bateria;				//can
-	uint8_t  bms_ok;					//can
-	uint8_t  voltaje_bateria;			//can
+	uint8_t  pedal;						//can 0x002
+	uint8_t  dead_man;					//can 0x003	
+	uint8_t  buttons_change_state;		//can 0x004
+	uint8_t  peripherals_ok;			//can 0x005
+
+	uint8_t  voltaje_bms;				//can 0x020
+	uint8_t  corriente_bms;				//can 0x021
+	uint8_t  voltaje_min_celda_bms;		//can 0x022
+	uint8_t  potencia_bms;				//can 0x023
+	uint8_t  t_max_bms;					//can 0x024
+	uint8_t  nivel_bateria_bms;			//can 0x025
+	uint8_t  bms_ok;					//can 0x026
 	
-	uint8_t  t_max;						//can 0x32
-	uint8_t  dcdc_ok;					//can
-	uint8_t  velocidad;					//can
-	uint8_t  V;							//can
-	uint8_t  I;							//can
-	uint8_t  temp_max;					//can
-	uint8_t  temp_motor;				//can
-	uint8_t  potencia;					//can
-	uint8_t  inversor_ok;				//can
+	uint8_t  voltaje_bateria_dcdc;		//can 0x030
+	uint8_t  t_max_dcdc;				//can 0x032
+	uint8_t  dcdc_ok;					//can 0x033
+
+	uint8_t  velocidad_inv;				//can 0x040
+	uint8_t  V_inv;						//can 0x041
+	uint8_t  I_inv;						//can 0x042
+	uint8_t  temp_max_inv;				//can 0x043
+	uint8_t  temp_motor_inv;			//can 0x044
+	uint8_t  potencia_inv;				//can 0x045
+	uint8_t  inversor_ok;				//can 0x046
 } typedef_bus3;
 
 
