@@ -7,20 +7,10 @@
 #define _FAILURES_ST_H_
 
 #include "buses/def_buses.h"
+#include "def_structs.h"
 
-/* rangos de monitoreo de variables */
-
-
-/* Condiciones para CAUTION1
-
-
-
-
-*/
-
-
-// estados de la maquina
-enum failures
+/* estados de la maquina */
+enum
 {
 	kOK=0,
 	kCAUTION1,
@@ -28,7 +18,8 @@ enum failures
 	kAUTOKILL
 };
 
-// variables maquina de estados fallas
-char estado_fallas = OK;             //variable de estados inicializada en OK
- 
+/* funciones */
+void failures_state_machine(void);
+uint8_t failures_st_leer(void);
+
 #endif  /* _FAILURES_ST_H_ */
