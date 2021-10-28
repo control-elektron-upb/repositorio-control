@@ -6,15 +6,49 @@
 #include "def_structs.h"
 
 
-void init_structs(void) {
-    /* inicializar las variables que se encuentran dentro de las estructuras de BMS, 
-    DCDC, Inversor, poniendo los valores de las variables que vienen de monitoreo 
-    de variables */
+/* funcion para incorporar los valores de las variables que 
+vienen de monitoreo de variables (y que estan publicadas en el bus 1) 
+a las estructuras BMS, DCDC, Inversor */
+void fill_structs(void) 
+{
+    fill_bms_struct(&BMS);  
+    fill_dcdc_struct(&DCDC);
+    fill_inversor_struct(&Inversor);
 }
 
 
+void fill_bms_struct(struct bms *p_BMS) 
+{
+    p_BMS->voltaje = bus_data.voltaje_bms_state;
+    p_BMS->corriente = bus_data.corriente_bms_state;
+	p_BMS->voltaje_min_celda = bus_data.voltaje_min_celda_bms_state;
+    p_BMS->potencia = bus_data.potencia_bms_state;	
+	p_BMS->t_max = bus_data.t_max_bms_state;
+    p_BMS->nivel_bateria = bus_data.nivel_bateria_bms_state;
+}
+
+
+void fill_dcdc_struct(struct dcdc *p_DCDC) 
+{
+    p_DCDC->voltaje_bateria = bus_data.voltaje_bateria_dcdc_state;
+    p_DCDC->t_max = bus_data.voltaje_bateria_dcdc_state;
+}
+
+
+void fill_inversor_struct(struct inversor *p_Inversor) 
+{
+    p_Inversor->velocidad = bus_data.velocidad_inv_state;
+    p_Inversor->V = bus_data.V_inv_state;
+    p_Inversor->I = bus_data.I_inv_state;
+    p_Inversor->temp_max = bus_data.temp_max_inv_state;
+    p_Inversor->temp_motor = bus_data.temp_motor_inv_state;
+    p_Inversor->potencia = bus_data.potencia_inv_state;
+}
+
+
+/* leer las variables de la estructura BMS y determinar que 
+valor de struct_status deberia asignarse */
 uint8_t bms_current_status(void) {
-    /* leer las variables de la estructura BMS y determinar que valor de struct_status deberia asignarse */
 
     /* condicion OK */
     if ( BMS.voltaje == OK && BMS.corriente == OK 
@@ -42,10 +76,9 @@ uint8_t bms_current_status(void) {
     }
 }
 
-
+/* leer las variables de la estructura DCDC y determinar que 
+valor de struct_status deberia asignarse */
 uint8_t dcdc_current_status(void) {
-    /* leer las variables de la estructura DCDC y determinar que valor de struct_status deberia
-    asignarse */
 
     /* condicion OK */
     if ( DCDC.t_max == OK && DCDC.voltaje_batería == OK ) 
@@ -66,10 +99,9 @@ uint8_t dcdc_current_status(void) {
     }
 }
 
-
+/* leer las variables de la estructura Inversor y determinar que 
+valor de struct_status deberia asignarse */
 uint8_t inversor_current_status(void) {
-    /* leer las variables de la estructura Inversor y determinar que valor de struct_status deberia
-    asignarse */
 
     /* condicion OK */
     if ( Inversor.velocidad == OK && Inversor.V == OK 
@@ -95,12 +127,4 @@ uint8_t inversor_current_status(void) {
     {
         return PROBLEM;
     }
-}
-
-int main () {
-    
-    BMS.struct_status = bms_current_status();
-    DCDC.struct_status = dcdc_current_status();
-    Inversor.struct_status = inversor_current_status();
-    
 }

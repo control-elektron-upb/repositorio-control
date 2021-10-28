@@ -9,12 +9,12 @@
 #include "buses/def_buses.h"
 
 /* */
-enum variable_state {
+typedef enum {
     OK,
     REGULAR,
     PROBLEM
-};
-typedef enum variable_state Var_State;
+} Var_State;
+
 
 /* estructura BMS con estado de variables del bms */
 struct bms {
@@ -31,7 +31,7 @@ struct bms {
 
 /* estructura DCDC con estado de variables del dcdc */
 struct dcdc {
-    Var_State voltaje_batería;
+    Var_State voltaje_bateria;
     Var_State t_max;
 
     Var_State struct_status;
@@ -51,10 +51,19 @@ struct inversor {
 
 } Inversor;
 
+/* funciones para determinar y asignar el estado actual de la estructura 
+segun como estan las variables */
 uint8_t bms_current_status(void);
 uint8_t dcdc_current_status(void);
 uint8_t inversor_current_status(void);
-void init_structs(void);
+
+/* funcion para incorporar los valores de las variables que 
+vienen de monitoreo de variables a las estructuras BMS, DCDC, Inversor */
+void fill_structs(void);
+
+void fill_bms_struct(struct bms *p_BMS);
+void fill_dcdc_struct(struct dcdc *p_DCDC);
+void fill_inversor_struct(struct inversor *p_Inversor);
 
 #endif  /* _DEF_STRUCTS_H_ */
 
