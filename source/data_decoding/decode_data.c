@@ -5,6 +5,7 @@
 
 #include "../buses/def_buses.h"
 
+/* decodifica todos los datos que vienen de can */
 
 void Decode_Data(void){
 	if( flag_decodificar == DECODIFICA ){
@@ -100,12 +101,7 @@ void decode_buttons(void){
 	}
 }
 
-
-
-
-
-
-/* parsing de datos que vienen de CAN (bus 3) */
+/* parsing de variables que vienen de CAN (bus 3) */
 void map_analog(void){
 	bus_data.rx_voltage = (float)bus_can_input.voltage_BMS / 60.0;	//0-240 -> 0-4
 	bus_data.rx_current = (float)bus_can_input.current_BMS / 3.0; 	//0-240 -> 0-80

@@ -8,7 +8,7 @@
 /* variable de estados inicializada en kINIT */ 
 uint8_t driving_modes_state = kINIT;
 
-
+/* funcion leer estado actual */
 uint8_t driving_modes_st_leer(void) {
 	return driving_modes_state;
 }
@@ -33,7 +33,7 @@ void driving_modes_state_machine(void) {
         if (EV_button == NORMAL && (bus_data.failures_state == OK || bus_data.failures_state == CAUTION1)) {
             driving_modes_state = kNORMAL;
         }
-        if (EV_button == SPORT && bus_data.failures_state == OK) {
+        else if (EV_button == SPORT && bus_data.failures_state == OK) {
             driving_modes_state = kSPORT;
         }
         break;
@@ -41,7 +41,7 @@ void driving_modes_state_machine(void) {
         if (EV_button == ECO || bus_data.failures_state == CAUTION2) {
             driving_modes_state = kECO;
         }
-        if (EV_button == SPORT && bus_data.failures_state == OK) {
+        else if (EV_button == SPORT && bus_data.failures_state == OK) {
             driving_modes_state = kSPORT;
         }
         break;
@@ -49,7 +49,7 @@ void driving_modes_state_machine(void) {
         if (EV_button == ECO || bus_data.failures_state == CAUTION2) {
             driving_modes_state = kECO;
         }
-        if (EV_button == NORMAL || bus_data.failures_state == CAUTION1) {
+        else if (EV_button == NORMAL || bus_data.failures_state == CAUTION1) {
             driving_modes_state = kSPORT;
         }
         break;

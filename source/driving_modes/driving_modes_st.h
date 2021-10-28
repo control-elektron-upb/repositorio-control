@@ -20,6 +20,7 @@ enum
 /* variable evento pulsador */
 uint8_t EV_button;
 
+/* funciones */
 void driving_modes_state_machine(void);
 uint8_t driving_modes_st_leer(void);
 
