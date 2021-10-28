@@ -78,6 +78,23 @@ typedef struct bus1
 	uint8_t  rx_temp_motor_inv;
 	uint8_t  rx_potencia_inv;
 
+	/* estado de las variables */
+	uint8_t voltaje_bms_state;
+	uint8_t corriente_bms_state;						
+	uint8_t voltaje_min_celda_bms_state;				
+	uint8_t potencia_bms_state;						
+	uint8_t t_max_bms_state;							
+	uint8_t nivel_bateria_bms_state;					
+	uint8_t voltaje_bateria_dcdc_state;				
+	uint8_t t_max_dcdc_state;							
+	uint8_t velocidad_inv_state;						
+	uint8_t V_inv_state;								
+	uint8_t I_inv_state;								
+	uint8_t temp_max_inv_state;						
+	uint8_t temp_motor_inv_state;					
+	uint8_t potencia_inv_state;	
+
+
 } typedef_bus1;
 
 enum buttons_states
