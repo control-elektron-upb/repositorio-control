@@ -1,3 +1,5 @@
+
+#define DEFAULT_STATE  DATA_PROBLEM;
 #include <stdint.h>
 #include "variable_monitoring/Variable_monitoring.h"
 /*
@@ -6,27 +8,26 @@
 2= REGULAR
 3=DATA PROBLEM
 */
-uint8_t DEFAULT_STATE = DATA_PROBLEM;
 
-uint8_t voltaje_bms_state = DATA_PROBLEM;
-uint8_t corriente_bms_state = DATA_PROBLEM;									
-uint8_t potencia_bms_state = DATA_PROBLEM;	
-uint8_t t_max_bms_state = DATA_PROBLEM;	
-uint8_t voltaje_min_celda_bms_state = DATA_PROBLEM;											
-uint8_t nivel_bateria_bms_state = DATA_PROBLEM;		
 
-uint8_t voltaje_bateria_dcdc_state = DATA_PROBLEM;				
-uint8_t t_max_dcdc_state = DATA_PROBLEM;
+uint8_t voltaje_bms_state = DEFAULT_STATE;
+uint8_t corriente_bms_state = DEFAULT_STATE;									
+uint8_t potencia_bms_state = DEFAULT_STATE;	
+uint8_t t_max_bms_state = DEFAULT_STATE;	
+uint8_t voltaje_min_celda_bms_state = DEFAULT_STATE;											
+uint8_t nivel_bateria_bms_state = DEFAULT_STATE;		
 
-uint8_t velocidad_inv_state = DATA_PROBLEM;	
-uint8_t temp_motor_inv_state = DATA_PROBLEM;					
-uint8_t V_inv_state = DATA_PROBLEM;								
-uint8_t I_inv_state = DATA_PROBLEM;	
-uint8_t temp_inv_state = DATA_PROBLEM;							
-uint8_t temp_max_inv_state = DATA_PROBLEM;							
-uint8_t potencia_inv_state = DATA_PROBLEM;	
+uint8_t voltaje_bateria_dcdc_state = DEFAULT_STATE;				
+uint8_t t_max_dcdc_state = DEFAULT_STATE;
 
-int regular_zone = 0.05; //+-5% de zona en regular
+uint8_t velocidad_inv_state = DEFAULT_STATE;	
+uint8_t temp_motor_inv_state = DEFAULT_STATE;					
+uint8_t V_inv_state = DEFAULT_STATE;								
+uint8_t I_inv_state = DEFAULT_STATE;								
+uint8_t temp_max_inv_state = DEFAULT_STATE;							
+uint8_t potencia_inv_state = DEFAULT_STATE;	
+
+float regular_zone = 0.05; //+-5% de zona en regular
 
 
 
@@ -50,10 +51,9 @@ t_max_dcdc_state = actual_estate_function(T_MAX_DCDC, T_MIN_DCDC, bus_data.rx_t_
 
 
 velocidad_inv_state = actual_estate_function(VEL_MAX_INV, VEL_MIN_INV, bus_data.rx_velocidad_inv, regular_zone, velocidad_inv_state);
-temp_inv_state = actual_estate_function(T_MAX_INV, T_MIN_INV,bus_data.rx_temp_inv, regular_zone, temp_inv_state);
 V_inv_state = actual_estate_function(V_MAX_INV,V_MIN_INV, bus_data.rx_V_inv, regular_zone, V_inv_state);
 I_inv_state = actual_estate_function(I_MAX_INV, I_MIN_INV, bus_data.rx_I_inv, regular_zone, I_inv_state);
-temp_max_inv_state = actual_estate_function(T_MAX_INV, T_MIN_INV, bus_data.rx_temp_inv, regular_zone, temp_max_inv_state);
+temp_max_inv_state = actual_estate_function(T_MAX_INV, T_MIN_INV, bus_data.rx_temp_max_inv, regular_zone, temp_max_inv_state);
 temp_motor_inv_state = actual_estate_function(T_MAX_MOTOR, T_MIN_MOTOR, bus_data.rx_temp_motor_inv, regular_zone, temp_motor_inv_state);
 potencia_inv_state = actual_estate_function(P_MAX_INV, P_MIN_INV, bus_data.rx_potencia_inv, regular_zone, potencia_inv_state);
 
@@ -107,9 +107,7 @@ default:
 }
 uint8_t resultado;
 
-uint8_t actual_estate_function (int D_max, int D_min, int Data, int reg_percent, char actual_estate){
-
-           // lo hago con int?? con char?? con uint??, como doy como resultado los valores del enum ??
+uint8_t actual_estate_function (uint8_t D_max, uint8_t D_min, uint8_t Data, float reg_percent, uint8_t actual_estate){
 
 
         if (actual_estate == OK){
@@ -141,7 +139,7 @@ uint8_t actual_estate_function (int D_max, int D_min, int Data, int reg_percent,
 
 
 }
-char comparaciones (int D_max, int D_min, int Data, int reg_percent){
+uint8_t comparaciones (uint8_t D_max, uint8_t D_min, uint8_t Data, uint8_t reg_percent){
 
             if((Data < (D_max * (-reg_percent + 1))) & (Data > (D_min*(reg_percent + 1)))) {
                 return OK; 
