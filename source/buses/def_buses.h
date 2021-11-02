@@ -63,20 +63,20 @@ typedef struct bus1
 	enum info rx_inversor_ok;
 	enum info rx_bms_ok;
 	enum info rx_dcdc_ok;
-	uint8_t  rx_voltaje_bms;
-	uint8_t  rx_corriente_bms;
-	uint8_t  rx_voltaje_min_celda_bms;
-	uint8_t  rx_potencia_bms;
-	uint8_t  rx_t_max_bms;
-	uint8_t  rx_nivel_bateria_bms;
-	uint8_t  rx_voltaje_bateria_dcdc;
-	uint8_t  rx_t_max_dcdc;
-	uint8_t  rx_velocidad_inv;
-	uint8_t  rx_V_inv;
-	uint8_t  rx_I_inv;
-	uint8_t  rx_temp_max_inv;
-	uint8_t  rx_temp_motor_inv;
-	uint8_t  rx_potencia_inv;
+	float  rx_voltaje_bms;
+	float  rx_corriente_bms;
+	float  rx_voltaje_min_celda_bms;
+	float  rx_potencia_bms;
+	float  rx_t_max_bms;
+	float  rx_nivel_bateria_bms;
+	float  rx_voltaje_bateria_dcdc;
+	float  rx_t_max_dcdc;
+	float  rx_velocidad_inv;
+	float  rx_V_inv;
+	float  rx_I_inv;
+	float  rx_temp_max_inv;
+	float  rx_temp_motor_inv;
+	float  rx_potencia_inv;
 
 	/* estado de las variables */
 	uint8_t voltaje_bms_state;
