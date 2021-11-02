@@ -11,6 +11,9 @@ void Decode_Data(void){
 	if( flag_decodificar == DECODIFICA ){
 		decode_peripherals_info();
 		decode_inversor_info();
+		decode_bms_info();
+		decode_dcdc_info();
+		decode_dead_man_info();
 		decode_buttons();
 		map_analog();
 		flag_decodificar = NO_DECODIFICA;
@@ -81,7 +84,7 @@ void decode_dcdc_info(void) {
 	}
 }
 
-/* decodifica pulsador */
+/* decodifica pulsadores */
 
 #define CAN_BTN1		0x01
 #define CAN_BTN2    	0x02
@@ -101,13 +104,24 @@ void decode_buttons(void){
 	}
 }
 
-/* parsing de variables que vienen de CAN (bus 3) */
+/* decodifica info de hombre muerto */
+
+#define CAN_PRESS		0x01
+#define CAN_NOPRESS 	0x02
+
+void decode_dcdc_info(void) {
+	switch(bus_can_input.dead_man) {
+	case CAN_PRESS:
+		bus_data.rx_dead_man = PRESS;
+		break;
+	case CAN_NOPRESS:
+		bus_data.rx_dead_man = NOPRESS;
+		break;
+	}
+}
+
+/* parsing de variables analogicas que vienen de CAN (bus 3) */
 void map_analog(void){
-	bus_data.rx_voltage = (float)bus_can_input.voltage_BMS / 60.0;	//0-240 -> 0-4
-	bus_data.rx_current = (float)bus_can_input.current_BMS / 3.0; 	//0-240 -> 0-80
-    
-	bus_data.rx_power = (float)bus_can_input.power * 5.0;			//0-250 -> 0-1250
-	bus_data.rx_battery = (float)bus_can_input.battery_level / 2.0;	//0-200 -> 0-100
-	bus_data.rx_speed = (float)bus_can_input.speed / 4.0;			//0-240 -> 0-60
+
 }
 
