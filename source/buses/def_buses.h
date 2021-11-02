@@ -58,25 +58,27 @@ typedef struct bus1
 	uint8_t failures_state;
 
 	/* datos decodificados */
+	enum dead_man_states rx_dead_man;
 	enum buttons_states rx_buttons_change_state;
 	enum info rx_peripherals_ok;		
 	enum info rx_inversor_ok;
 	enum info rx_bms_ok;
 	enum info rx_dcdc_ok;
-	float  rx_voltaje_bms;
-	float  rx_corriente_bms;
-	float  rx_voltaje_min_celda_bms;
-	float  rx_potencia_bms;
-	float  rx_t_max_bms;
-	float  rx_nivel_bateria_bms;
-	float  rx_voltaje_bateria_dcdc;
-	float  rx_t_max_dcdc;
-	float  rx_velocidad_inv;
-	float  rx_V_inv;
-	float  rx_I_inv;
-	float  rx_temp_max_inv;
-	float  rx_temp_motor_inv;
-	float  rx_potencia_inv;
+	float rx_pedal;
+	float rx_voltaje_bms;
+	float rx_corriente_bms;
+	float rx_voltaje_min_celda_bms;
+	float rx_potencia_bms;
+	float rx_t_max_bms;
+	float rx_nivel_bateria_bms;
+	float rx_voltaje_bateria_dcdc;
+	float rx_t_max_dcdc;
+	float rx_velocidad_inv;
+	float rx_V_inv;
+	float rx_I_inv;
+	float rx_temp_max_inv;
+	float rx_temp_motor_inv;
+	float rx_potencia_inv;
 
 	/* estado de las variables */
 	uint8_t voltaje_bms_state;
@@ -108,6 +110,12 @@ enum info
 {
 	OK,
 	ERROR
+};
+
+enum dead_man_states
+{
+	PRESS,
+	NOPRESS
 };
 
 /*
