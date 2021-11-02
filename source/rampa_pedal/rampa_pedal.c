@@ -5,15 +5,14 @@
 
 #include "rampa_pedal.h"
 
-uint8_t velocidad_inversor;
+uint8_t velocidad_inversor = 0;
 
-float get_velocidad_inversor(){
+
+float get_velocidad_inversor() {
     return velocidad_inversor;
 }
 
-float 
-
-void rampa_function(uint8_t bus_data.driving_mode, float bus_data.rx_pedal) {
+void rampa_function(uint8_t driving_mode, uint8_t dead_man, float pedal) {
 
     switch (driving_mode)
     {
@@ -24,13 +23,17 @@ void rampa_function(uint8_t bus_data.driving_mode, float bus_data.rx_pedal) {
         velocidad_inversor = normal_rampa(pedal);
     case SPORT:
         velocidad_inversor = sport_rampa(pedal);
-    case DEAD_MAN:
+    }
+
+    if (dead_man == 1)
+    {
         velocidad_inversor = dead_man_rampa(pedal);
     }
+    
 }
 
 float eco_rampa(float pedal) {
-    
+
     return (float) 1 / ( 1 + exp(-pedal) );
 }
 
