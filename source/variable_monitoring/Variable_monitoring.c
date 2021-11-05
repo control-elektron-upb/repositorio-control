@@ -107,7 +107,7 @@ default:
 }
 uint8_t resultado;
 
-uint8_t actual_estate_function (uint8_t D_max, uint8_t D_min, uint8_t Data, float reg_percent, uint8_t actual_estate){
+uint8_t actual_estate_function (float D_max, float D_min, float Data, float reg_percent, uint8_t actual_estate){
 
 
         if (actual_estate == OK){
@@ -139,7 +139,7 @@ uint8_t actual_estate_function (uint8_t D_max, uint8_t D_min, uint8_t Data, floa
 
 
 }
-uint8_t comparaciones (uint8_t D_max, uint8_t D_min, uint8_t Data, uint8_t reg_percent){
+uint8_t comparaciones (float D_max, float D_min, float Data, float reg_percent){
 
             if((Data < (D_max * (-reg_percent + 1))) & (Data > (D_min*(reg_percent + 1)))) {
                 return OK; 
