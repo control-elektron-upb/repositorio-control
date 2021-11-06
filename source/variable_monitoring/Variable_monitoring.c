@@ -27,7 +27,7 @@ uint8_t I_inv_state = DEFAULT_STATE;
 uint8_t temp_max_inv_state = DEFAULT_STATE;							
 uint8_t potencia_inv_state = DEFAULT_STATE;	
 
-float regular_zone = 0.055; //+-5% de zona en regular
+float regular_zone = 0.05; //+-5% de zona en regular
 
 
 
