@@ -25,6 +25,8 @@ void fill_bms_struct(struct bms *p_BMS)
     p_BMS->potencia = bus_data.potencia_bms_state;	
 	p_BMS->t_max = bus_data.t_max_bms_state;
     p_BMS->nivel_bateria = bus_data.nivel_bateria_bms_state;
+
+    p_BMS->struct_status = bms_current_status();
 }
 
 
@@ -32,6 +34,8 @@ void fill_dcdc_struct(struct dcdc *p_DCDC)
 {
     p_DCDC->voltaje_bateria = bus_data.voltaje_bateria_dcdc_state;
     p_DCDC->t_max = bus_data.voltaje_bateria_dcdc_state;
+
+    p_DCDC->struct_status = dcdc_current_status();
 }
 
 
@@ -43,6 +47,8 @@ void fill_inversor_struct(struct inversor *p_Inversor)
     p_Inversor->temp_max = bus_data.temp_max_inv_state;
     p_Inversor->temp_motor = bus_data.temp_motor_inv_state;
     p_Inversor->potencia = bus_data.potencia_inv_state;
+
+    p_Inversor->struct_status = inversor_current_status();
 }
 
 
