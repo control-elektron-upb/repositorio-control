@@ -193,6 +193,6 @@ typedef struct bus3
 
 
 extern typedef_bus1 bus_data;
-extern typedef_bus2 bus_data_output;
+extern typedef_bus2 bus_can_output;
 extern typedef_bus3 bus_can_input;
 #endif
