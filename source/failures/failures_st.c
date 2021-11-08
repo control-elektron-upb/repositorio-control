@@ -8,14 +8,19 @@
 /* variable de estados inicializada en kCAUTION1 */
 uint8_t failures_state = kCAUTION1;
 
-/* funcion leer estado actual */
+/* variable falla */ 
+uint8_t failure;
+
+/* funcion leer falla actual */
 uint8_t failures_st_leer(void) {
-    return failures_state;
+    return failure;
 }
 
 /* maquina de estados */
 void failures_state_machine(void) {
-    switch (failures_state) {
+
+    switch (failures_state) 
+    {
     case kOK:
         if (EV_autokill) {
             failures_state = kAUTOKILL;
@@ -32,6 +37,7 @@ void failures_state_machine(void) {
         {
             failures_state = kCAUTION1;
         }
+        failure = OK;
         break;
     case kCAUTION1:
         if (EV_autokill) {
@@ -49,6 +55,7 @@ void failures_state_machine(void) {
         {
             failures_state = kOK;
         }
+        failure = CAUTION1;
         break;
     case kCAUTION2:
         if (EV_autokill) {
@@ -60,11 +67,16 @@ void failures_state_machine(void) {
         {
             failures_state = kCAUTION1;
         }
+        failure = CAUTION2;
         break;
     case kAUTOKILL:
-        /* failures_state = kAUTOKILL y enviar mensaje de maxima prioridad CAN*/
+        /* enviar mensaje de maxima prioridad CAN? */
+        failure = AUTOKILL;
         break;
     }
+
+    /* variable failure a bus 1 (bus_data) */ 
+    bus_data.failure = failure;
 }
 
 
