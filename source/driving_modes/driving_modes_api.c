@@ -18,17 +18,17 @@ void DRIVING_MODES_OPS(void) {
 #define CAN_ECO         0x03
 #define CAN_SPORT       0x04
 
-/* funcion envío de velocidad de inversor a bus de salida can */ 
+/* funcion envío de modo de manejo a bus de salida can */ 
 void Send_Driving_Mode(void) {
-    switch (bus_data.driving_modes_state)
+    switch (bus_data.driving_mode)
     {
-    case kECO:
+    case ECO:
         bus_can_output.estado_manejo = CAN_ECO;
         break;
-    case kNORMAL:
+    case NORMAL:
         bus_can_output.estado_manejo = CAN_NORMAL;
         break;
-    case kSPORT:
+    case SPORT:
         bus_can_output.estado_manejo = CAN_SPORT;
         break;
     }
