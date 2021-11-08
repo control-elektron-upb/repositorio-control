@@ -53,9 +53,9 @@ BUS 1:
 
 typedef struct bus1
 {
-	/* variables de estados de maquinas */
-	uint8_t driving_modes_state;
-	uint8_t failures_state;
+	/* maquinas modo de manejo y fallas */
+	enum driving_modes driving_mode;
+	enum failures failure;
 
 	/* datos decodificados */
 	enum dead_man_states rx_dead_man;
@@ -96,8 +96,25 @@ typedef struct bus1
 	uint8_t temp_motor_inv_state;					
 	uint8_t potencia_inv_state;	
 
+	/* rampa pedal */
+	float velocidad_inversor;
 
 } typedef_bus1;
+
+enum driving_modes
+{
+	ECO,
+	NORMAL,
+	SPORT
+};
+
+enum failures
+{
+	OK,
+	CAUTION1,
+	CAUTION2,
+	AUTOKILL
+};
 
 enum buttons_states
 {
@@ -143,20 +160,6 @@ typedef struct bus2
 	} async[LENGTH_ASYNC_MSG];
 } typedef_bus2;
 
-enum driving_modes
-{
-	ECO,
-	NORMAL,
-	SPORT
-};
-
-enum failures
-{
-	OK,
-	CAUTION1,
-	CAUTION2,
-	AUTOKILL
-};
 
 /*
 BUS 3:
