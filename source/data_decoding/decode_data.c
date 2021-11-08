@@ -109,7 +109,7 @@ void decode_buttons(void){
 #define CAN_PRESS		0x01
 #define CAN_NOPRESS 	0x02
 
-void decode_dcdc_info(void) {
+void decode_dead_man_info(void) {
 	switch(bus_can_input.dead_man) {
 	case CAN_PRESS:
 		bus_data.rx_dead_man = PRESS;
