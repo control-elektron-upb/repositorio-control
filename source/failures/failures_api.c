@@ -26,18 +26,18 @@ void FAILURES_OPS(void) {
 
 /* funcion envío de falla a bus de salida can */ 
 void Send_Failure(void) {
-    switch (bus_data.failures_state)
+    switch (bus_data.failure)
     {
-    case kOK:
+    case OK:
         bus_can_output.estado_falla = CAN_OK;
         break;
-    case kCAUTION1:
+    case CAUTION1:
         bus_can_output.estado_falla = CAN_CAUTION_1;
         break;
-    case kCAUTION2:
+    case CAUTION2:
         bus_can_output.estado_falla = CAN_CAUTION_2;
         break;
-    case kAUTOKILL:
+    case AUTOKILL:
         bus_can_output.estado_falla = CAN_AUTOKILL;
         break;
     }
