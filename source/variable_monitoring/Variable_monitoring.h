@@ -42,8 +42,8 @@ float T_MAX_DCDC          = 0;
 float T_MIN_DCDC          = 0;
 
 
-float  VEL_MAX_INV         = 0;
-float  VEL_MIN_INV         = 0;
+float  VEL_MAX_INV        = 0;
+float  VEL_MIN_INV        = 0;
 
 float T_MAX_MOTOR         = 0;
 float T_MIN_MOTOR         = 0;
