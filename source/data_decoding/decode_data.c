@@ -4,8 +4,12 @@
  */
 
 #include "../buses/def_buses.h"
+#include "decode_data.h"
 
-/* decodifica todos los datos que vienen de can */
+/**
+ * @brief Decodifica todos los datos que vienen de can
+ * 
+ */
 
 void Decode_Data(void){
 	if( flag_decodificar == DECODIFICA ){
@@ -19,6 +23,21 @@ void Decode_Data(void){
 		flag_decodificar = NO_DECODIFICA;
 	}
 }
+
+
+/**
+ * @brief Decodifica variables que vienen de periféricos y guarda los datos 
+ * en la instancia Rx_Peripherals del tipo de datos rx_peripherals_vars_t 
+ * y que se encuentra en el bus_data.
+ * 
+ */
+void decode_peripherals(void)
+{
+	bus_data.Rx_Peripherals.pedal = (rx_var_t) bus_can_input.pedal / 60.0;	
+}
+
+
+
 
 /* decodifica info de perifericos */
 
@@ -34,6 +53,9 @@ void decode_peripherals_info(void) {
 		bus_data.rx_peripherals_ok = ERROR;
 		break;
 	}
+
+
+	
 }
 
 /* decodifica info de inversor */

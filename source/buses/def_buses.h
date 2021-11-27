@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "decode_data.h"
+#include "variable_monitoring.h"
+
 /* CAN ID*/
 
 /* ID Transmit */
@@ -41,99 +44,73 @@
 #define ID_INVERSOR_OK				0x046
 
 
-/*
-BUS 1:
--Parsing de datos (Decodificación data <- CAN)
--Rampa pedal
--Maquina de modo manejo
--Maquina de falla
--Monitoreo de variables
--Generación de indicadores
-*/
+/**
+ * @brief 
+ * BUS 1:
+ * - Parsing de datos (Decodificación data <- CAN)
+ * - Rampa pedal
+ * - Maquina modo de manejo
+ * - Maquina de fallas
+ * - Monitoreo de variables
+ * - Generación de indicadores
+ */
 
 typedef struct bus1
 {
-	/* maquinas modo de manejo y fallas */
-	enum driving_modes driving_mode;
-	enum failures failure;
+	/** Datos maquinas modo de manejo y fallas */
+	driving_mode_t 			driving_mode;
+	failure_t 				failure;
 
-	/* datos decodificados */
-	enum dead_man_states rx_dead_man;
-	enum buttons_states rx_buttons_change_state;
-	enum info rx_peripherals_ok;		
-	enum info rx_inversor_ok;
-	enum info rx_bms_ok;
-	enum info rx_dcdc_ok;
-	float rx_pedal;
-	float rx_voltaje_bms;
-	float rx_corriente_bms;
-	float rx_voltaje_min_celda_bms;
-	float rx_potencia_bms;
-	float rx_t_max_bms;
-	float rx_nivel_bateria_bms;
-	float rx_voltaje_bateria_dcdc;
-	float rx_t_max_dcdc;
-	float rx_velocidad_inv;
-	float rx_V_inv;
-	float rx_I_inv;
-	float rx_temp_max_inv;
-	float rx_temp_motor_inv;
-	float rx_potencia_inv;
+	/** Estructuras con variables decodificadas */
+	rx_peripherals_vars_t 	Rx_Peripherals;
+	rx_bms_vars_t 			Rx_Bms;
+	rx_dcdc_vars_t 			Rx_Dcdc;
+	rx_inversor_vars_t 		Rx_Inversor;
 
-	/* estado de las variables */
-	uint8_t voltaje_bms_state;
-	uint8_t corriente_bms_state;						
-	uint8_t voltaje_min_celda_bms_state;				
-	uint8_t potencia_bms_state;						
-	uint8_t t_max_bms_state;							
-	uint8_t nivel_bateria_bms_state;					
-	uint8_t voltaje_bateria_dcdc_state;				
-	uint8_t t_max_dcdc_state;							
-	uint8_t velocidad_inv_state;						
-	uint8_t V_inv_state;								
-	uint8_t I_inv_state;								
-	uint8_t temp_max_inv_state;						
-	uint8_t temp_motor_inv_state;					
-	uint8_t potencia_inv_state;	
+	/** Estructuras con estados de las variables */
+	bms_vars_states_t		Bms_States;
+	dcdc_vars_states_t		Dcdc_States;
+	inversor_vars_states_t	Inversor_States;
 
 	/* rampa pedal */
 	float velocidad_inversor;
 
 } typedef_bus1;
 
-enum driving_modes
+typedef enum
 {
 	ECO,
 	NORMAL,
 	SPORT
-};
+}driving_mode_t;
 
-enum failures
+typedef enum
 {
 	OK,
 	CAUTION1,
 	CAUTION2,
 	AUTOKILL
-};
+}failure_t;
 
-enum buttons_states
+typedef enum
 {
 	ECO,
 	NORMAL,
 	SPORT
-};
+}buttons_state;
 
-enum info
+typedef enum
 {
 	OK,
 	ERROR
-};
+}module_info;
 
-enum dead_man_states
+typedef enum
 {
 	PRESS,
 	NOPRESS
-};
+}dead_man_state;
+
 
 /*
 BUS 2:
