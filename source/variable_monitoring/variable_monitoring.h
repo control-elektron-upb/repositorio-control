@@ -17,18 +17,11 @@
 #include "buses/def_buses.h"
 #include "buses/def_buses.c"
 
-/**
- * @brief Porcentaje para zona regular (+/- 5% por defecto)
- * 
- */
+/** Porcentaje para zona regular (+/- 5% por defecto) */
+#define REGULAR_ZONE     0.05
 
-#define REGULAR_ZONE      0.05
 
-/**
- * @brief Valores mínimos y máximos del BMS
- * 
- */
-
+/** Valores mínimos y máximos del BMS */
 #define V_MAX_BMS           0
 #define V_MIN_BMS           0
 
@@ -48,11 +41,7 @@
 #define NIV_BAT_MIN_BMS     0
 
 
-/**
- * @brief Valores mínimos y máximos del DCDC
- * 
- */
-
+/** Valores mínimos y máximos del DCDC */
 #define V_BAT_MAX_DCDC      0
 #define V_BAT_MIN_DCDC      0
 
@@ -60,11 +49,7 @@
 #define T_MIN_DCDC          0
 
 
-/**
- * @brief Valores mínimos y máximos del Inversor
- * 
- */
-
+/** Valores mínimos y máximos del Inversor*/
 #define VEL_MAX_INV         0
 #define VEL_MIN_INV         0
 
@@ -85,7 +70,7 @@
 
 
 /**
- * @brief Función monitoreo de variables
+ * @brief Función principal de monitoreo de variables
  * 
  */
 void variable_monitoring (void);
@@ -95,11 +80,11 @@ void variable_monitoring (void);
  * @brief Tipo de dato enum var_state para los estados de las variables
  * 
  */
-
 typedef enum {
     OK,
     REGULAR,
-    PROBLEM
+    PROBLEM,
+    DATA_PROBLEM
 } var_state;
 
 
@@ -107,7 +92,6 @@ typedef enum {
  * @brief Definición tipo de estructura para estado de las variables de BMS
  * 
  */
-
 typedef struct
 {
     var_state   voltaje;
@@ -124,7 +108,6 @@ typedef struct
  * @brief Definición tipo de estructura para estado de las variables de DCDC
  * 
  */
-
 typedef struct 
 {
     var_state   voltaje_bateria;
@@ -137,7 +120,6 @@ typedef struct
  * @brief Definición tipo de estructura para estado de las variables de Inversor
  * 
  */
-
 typedef struct 
 {
     var_state   velocidad;

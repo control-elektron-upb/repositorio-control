@@ -68,9 +68,9 @@ typedef struct bus1
 	rx_inversor_vars_t 		Rx_Inversor;
 
 	/** Estructuras con estados de las variables */
-	bms_vars_states_t		Bms_States;
-	dcdc_vars_states_t		Dcdc_States;
-	inversor_vars_states_t	Inversor_States;
+	bms_vars_states_t		St_Bms;
+	dcdc_vars_states_t		St_Dcdc;
+	inversor_vars_states_t	St_Inversor;
 
 	/* rampa pedal */
 	float velocidad_inversor;
@@ -91,25 +91,6 @@ typedef enum
 	CAUTION2,
 	AUTOKILL
 }failure_t;
-
-typedef enum
-{
-	ECO,
-	NORMAL,
-	SPORT
-}buttons_state;
-
-typedef enum
-{
-	OK,
-	ERROR
-}module_info;
-
-typedef enum
-{
-	PRESS,
-	NOPRESS
-}dead_man_state;
 
 
 /*

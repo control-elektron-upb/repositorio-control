@@ -12,12 +12,45 @@
 
 #ifndef _DECODE_DATA_H_
 #define _DECODE_DATA_H_
+ 
+#include "../buses/def_buses.h"
 
 /**
- * @brief  Tipo de dato float para variables analógicas decodificadas 
+ * @brief  Tipo de dato rx_var_t para variables analógicas decodificadas 
  * 
  */
 typedef float rx_var_t;
+
+/**
+ * @brief Tipo de dato buttons_state para variable botones de periféricos
+ * 
+ */
+typedef enum
+{
+	ECO,
+	NORMAL,
+	SPORT
+}buttons_state;
+
+/**
+ * @brief Tipo de dato module_info para variable info de cada módulo
+ * 
+ */
+typedef enum
+{
+	OK,
+	ERROR
+}module_info;
+
+/**
+ * @brief Tipo de dato dead_man_state para variable dead_man de periféricos
+ * 
+ */
+typedef enum
+{
+	PRESS,
+	NOPRESS
+}dead_man_state;
 
 
 /**
