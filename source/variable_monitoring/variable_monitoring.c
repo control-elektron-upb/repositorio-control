@@ -12,16 +12,28 @@
 #include "variable_monitoring.h"
 
 
-/** Estado por defecto de las variables */
+/**
+ * @brief Estado por defecto de las variables
+ * 
+ */
 #define DEFAULT_STATE       DATA_PROBLEM
 
-/** Inicializa la estructura con los estados de las variables del BMS en DEFAULT_STATE */
+/**
+ * @brief Inicializa instancia de estructura de tipo bms_vars_states_t con los estados de las variables del BMS en DEFAULT_STATE
+ * 
+ */
 bms_vars_states_t       Bms_States = {DEFAULT_STATE};
 
-/** Inicializa la estructura con los estados de las variables del DCDC en DEFAULT_STATE */
+/**
+ * @brief Inicializa instancia de estructura de tipo dcdc_vars_states_t con los estados de las variables del DCDC en DEFAULT_STATE
+ * 
+ */
 dcdc_vars_states_t      Dcdc_States = {DEFAULT_STATE};
 
-/** Inicializa la estructura con los estados de las variables del Inversor en DEFAULT_STATE */
+/**
+ * @brief Inicializa instancia de estructura de tipo inversor_vars_states_t con los estados de las variables del inversor en DEFAULT_STATE
+ * 
+ */
 inversor_vars_states_t  Inversor_States = {DEFAULT_STATE};
 
 
@@ -29,16 +41,10 @@ inversor_vars_states_t  Inversor_States = {DEFAULT_STATE};
  * @brief Función principal de monitoreo de variables
  * 
  */
-void variable_monitoring (void)
+void Variable_Monitoring (void)
 {
-
-    /** Actualiza estado de las variables de BMS */
-    bms_variable_monitoring(&Bms_States);
-
-    /** Actualiza estado de las variables de DCDC */
-    //dcdc_variable_monitoring(&Dcdc_States);
-
-    /** Actualiza estado de las variables de Inversor */
+    bms_variable_monitoring(&Bms_States);               
+    //dcdc_variable_monitoring(&Dcdc_States);      
     //inversor_variable_monitoring(&Inversor_States);
 }
 
@@ -46,36 +52,56 @@ void variable_monitoring (void)
 /**
  * @brief Monitoreo de las variables decodificadas del BMS
  * 
- * @param Bms_States Estructura con estados de las variables del BMS
+ * Actualiza estados de las variables decodificadas del BMS de acuerdo a sus valores actuales, 
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * en una estructura de tipo bms_vars_states_t.
+ * 
+ * @param p_Bms_States Puntero a estructura de tipo bms_vars_states_t que contiene los estados de las variables del BMS
  */
-static void bms_variable_monitoring(bms_vars_states_t* Bms_States)
+static void bms_variable_monitoring(bms_vars_states_t *p_Bms_States)
 {
-    Bms_States->voltaje = current_var_state(V_MAX_BMS, V_MIN_BMS, bus_data.Rx_Bms.voltaje, REGULAR_ZONE, Bms_States->voltaje);
+    p_Bms_States->voltaje = current_var_state(V_MAX_BMS, V_MIN_BMS, bus_data.Rx_Bms.voltaje, REGULAR_ZONE, p_Bms_States->voltaje);
 
-    Bms_States->corriente = current_var_state(I_MAX_BMS, I_MIN_BMS, bus_data.Rx_Bms.corriente, REGULAR_ZONE, Bms_States->corriente);
+    p_Bms_States->corriente = current_var_state(I_MAX_BMS, I_MIN_BMS, bus_data.Rx_Bms.corriente, REGULAR_ZONE, p_Bms_States->corriente);
     
-    Bms_States->voltaje_min_celda = current_var_state(P_MAX_BMS, P_MIN_BMS, bus_data.Rx_Bms.voltaje_min_celda, REGULAR_ZONE, Bms_States->voltaje_min_celda);
+    p_Bms_States->voltaje_min_celda = current_var_state(P_MAX_BMS, P_MIN_BMS, bus_data.Rx_Bms.voltaje_min_celda, REGULAR_ZONE, p_Bms_States->voltaje_min_celda);
     
-    Bms_States->potencia = current_var_state(T_MAX_BMS, T_MIN_BMS, bus_data.Rx_Bms.potencia, REGULAR_ZONE, Bms_States->potencia);
+    p_Bms_States->potencia = current_var_state(T_MAX_BMS, T_MIN_BMS, bus_data.Rx_Bms.potencia, REGULAR_ZONE, p_Bms_States->potencia);
     
-    Bms_States->t_max = current_var_state(V_CELDA_MAX_BMS, V_CELDA_MIN_BMS, bus_data.Rx_Bms.t_max, REGULAR_ZONE, Bms_States->t_max);
+    p_Bms_States->t_max = current_var_state(V_CELDA_MAX_BMS, V_CELDA_MIN_BMS, bus_data.Rx_Bms.t_max, REGULAR_ZONE, p_Bms_States->t_max);
     
-    Bms_States->nivel_bateria = current_var_state(NIV_BAT_MAX_BMS, NIV_BAT_MIN_BMS, bus_data.Rx_Bms.nivel_bateria, REGULAR_ZONE, Bms_States->nivel_bateria);
+    p_Bms_States->nivel_bateria = current_var_state(NIV_BAT_MAX_BMS, NIV_BAT_MIN_BMS, bus_data.Rx_Bms.nivel_bateria, REGULAR_ZONE, p_Bms_States->nivel_bateria);
 }
 
 
 /**
  * @brief Monitoreo de las variables decodificadas del DCDC
  * 
- * @param Dcdc_States Estructura con estados de las variables del DCDC
+ * Actualiza estados de las variables decodificadas del DCDC de acuerdo a sus valores actuales, 
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * en la estructura de tipo dcdc_vars_states_t.
+ * 
+ * @param p_Dcdc_States Puntero a estructura de tipo dcdc_vars_states_t que contiene los estados de las variables del DCDC
  */
+static void dcdc_variable_monitoring(dcdc_vars_states_t *p_Dcdc_States)
+{
+    asm("nop");
+}
 
 
 /**
- * @brief Monitoreo de las variables decodificadas del Inversor
+ * @brief Monitoreo de las variables decodificadas del inversor
  * 
- * @param Inversor_States Estructura con estados de las variables del Inversor
+ * Actualiza estados de las variables decodificadas del inversor de acuerdo a sus valores actuales, 
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * en la estructura de tipo inversor_vars_states_t.
+ * 
+ * @param p_Inversor_States Puntero a estructura de tipo inversor_vars_states_t que contiene los estados de las variables del inversor
  */
+static void inversor_variable_monitoring(inversor_vars_states_t *p_Inversor_States)
+{
+    asm("nop");
+}
 
 
 /**
@@ -87,7 +113,7 @@ static void bms_variable_monitoring(bms_vars_states_t* Bms_States)
  * @param reg_percent Porcentaje de zona regular
  * @return var_state Estado actual de la variable
  */
-static var_state current_var_state(float D_max, float D_min, float Data, float reg_percent, var_state current_state)
+static var_state current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Data, rx_var_t reg_percent, var_state current_state)
 {
     if(current_state == DATA_PROBLEM){
         return DATA_PROBLEM;
@@ -106,9 +132,9 @@ static var_state current_var_state(float D_max, float D_min, float Data, float r
  * @param D_min Valor mínimo de la variable
  * @param Data  Valor actual de la variable 
  * @param reg_percent Porcentaje de zona regular
- * @return var_state 
+ * @return var_state Estado actual de la variable
  */
-static var_state comparaciones (float D_max, float D_min, float Data, float reg_percent){
+static var_state comparaciones (rx_var_t D_max, rx_var_t D_min, rx_var_t Data, rx_var_t reg_percent){
 
     if((Data < (D_max * (-reg_percent + 1))) & (Data > (D_min*(reg_percent + 1)))) {
         return OK; 

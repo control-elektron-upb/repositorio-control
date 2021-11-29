@@ -12,17 +12,26 @@
 #ifndef _VARIABLE_MONITORING_H_
 #define _VARIABLE_MONITORING_H_
 
-#include <stdint.h>
-
 #include "buses/def_buses.h"
 #include "buses/def_buses.c"
 
-/** Porcentaje para zona regular (+/- 5% por defecto) */
+/**
+ * @brief Porcentaje para zona regular (+/- 5% por defecto)
+ * 
+ */
 #define REGULAR_ZONE     0.05
 
 
-/** Valores mínimos y máximos del BMS */
+/**
+ * @brief Valor máximo de voltaje BMS
+ * 
+ */
 #define V_MAX_BMS           0
+
+/**
+ * @brief Valor mínimo de voltaje BMS
+ * 
+ */
 #define V_MIN_BMS           0
 
 #define I_MAX_BMS           0
@@ -41,16 +50,32 @@
 #define NIV_BAT_MIN_BMS     0
 
 
-/** Valores mínimos y máximos del DCDC */
+/**
+ * @brief Valor máximos de voltaje batería de DCDC
+ * 
+ */
 #define V_BAT_MAX_DCDC      0
+
+/**
+ * @brief Valor mínimo de voltaje batería de DCDC
+ * 
+ */
 #define V_BAT_MIN_DCDC      0
 
 #define T_MAX_DCDC          0
 #define T_MIN_DCDC          0
 
 
-/** Valores mínimos y máximos del Inversor*/
+/**
+ * @brief Valor máximo de velocidad de inversor
+ * 
+ */
 #define VEL_MAX_INV         0
+
+/**
+ * @brief Valor mínimo de velocidad de inversor
+ * 
+ */
 #define VEL_MIN_INV         0
 
 #define T_MAX_MOTOR         0
@@ -81,18 +106,18 @@ void variable_monitoring (void);
  * 
  */
 typedef enum {
-    OK,
-    REGULAR,
-    PROBLEM,
-    DATA_PROBLEM
+    OK,                 /**< Estado OK */
+    REGULAR,            /**< Estado REGULAR */
+    PROBLEM,            /**< Estado PROBLEM */
+    DATA_PROBLEM        /**< Problema con el dato */
 } var_state;
 
 
 /**
- * @brief Definición tipo de estructura para estado de las variables de BMS
+ * @brief Definición tipo de estructura para estado de las variables del BMS
  * 
  */
-typedef struct
+typedef struct bms_vars_states_t
 {
     var_state   voltaje;
     var_state   corriente;
@@ -105,10 +130,10 @@ typedef struct
 
 
 /**
- * @brief Definición tipo de estructura para estado de las variables de DCDC
+ * @brief Definición tipo de estructura para estado de las variables del DCDC
  * 
  */
-typedef struct 
+typedef struct dcdc_vars_states_t
 {
     var_state   voltaje_bateria;
     var_state   t_max;
@@ -117,10 +142,10 @@ typedef struct
 
 
 /**
- * @brief Definición tipo de estructura para estado de las variables de Inversor
+ * @brief Definición tipo de estructura para estado de las variables del inversor
  * 
  */
-typedef struct 
+typedef struct inversor_vars_states_t
 {
     var_state   velocidad;
     var_state   V;
