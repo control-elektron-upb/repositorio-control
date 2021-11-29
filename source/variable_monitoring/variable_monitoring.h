@@ -15,23 +15,15 @@
 #include "buses/def_buses.h"
 #include "buses/def_buses.c"
 
-/**
- * @brief Porcentaje para zona regular (+/- 5% por defecto)
- * 
- */
+
+/** @brief Porcentaje para zona regular (+/- 5% por defecto) */
 #define REGULAR_ZONE     0.05
 
 
-/**
- * @brief Valor máximo de voltaje BMS
- * 
- */
+/** @brief Valor máximo de voltaje BMS */
 #define V_MAX_BMS           0
 
-/**
- * @brief Valor mínimo de voltaje BMS
- * 
- */
+/** @brief Valor mínimo de voltaje BMS */
 #define V_MIN_BMS           0
 
 #define I_MAX_BMS           0
@@ -50,32 +42,20 @@
 #define NIV_BAT_MIN_BMS     0
 
 
-/**
- * @brief Valor máximos de voltaje batería de DCDC
- * 
- */
+/** @brief Valor máximo de voltaje batería de DCDC */
 #define V_BAT_MAX_DCDC      0
 
-/**
- * @brief Valor mínimo de voltaje batería de DCDC
- * 
- */
+/** @brief Valor mínimo de voltaje batería de DCDC */
 #define V_BAT_MIN_DCDC      0
 
 #define T_MAX_DCDC          0
 #define T_MIN_DCDC          0
 
 
-/**
- * @brief Valor máximo de velocidad de inversor
- * 
- */
+/** @brief Valor máximo de velocidad de inversor */
 #define VEL_MAX_INV         0
 
-/**
- * @brief Valor mínimo de velocidad de inversor
- * 
- */
+/** @brief Valor mínimo de velocidad de inversor */
 #define VEL_MIN_INV         0
 
 #define T_MAX_MOTOR         0

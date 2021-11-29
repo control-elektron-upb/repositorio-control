@@ -40,19 +40,21 @@ inversor_vars_states_t  Inversor_States = {DEFAULT_STATE};
 /**
  * @brief Función principal de monitoreo de variables
  * 
+ *  Actualiza los estados de las variables decodificadas del BMS, DCDC e inversor.
+ * 
  */
 void Variable_Monitoring (void)
 {
-    bms_variable_monitoring(&Bms_States);               
-    //dcdc_variable_monitoring(&Dcdc_States);      
-    //inversor_variable_monitoring(&Inversor_States);
+    bms_variable_monitoring(&Bms_States);               /* Actualiza estado de las variables del BMS */
+    dcdc_variable_monitoring(&Dcdc_States);             /* Actualiza estado de las variables del DCDC */
+    inversor_variable_monitoring(&Inversor_States);     /* Actualiza estado de las variables del inversor */
 }
 
 
 /**
  * @brief Monitoreo de las variables decodificadas del BMS
  * 
- * Actualiza estados de las variables decodificadas del BMS de acuerdo a sus valores actuales, 
+ * Actualiza los estados de las variables decodificadas del BMS de acuerdo a sus valores actuales, 
  * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en una estructura de tipo bms_vars_states_t.
  * 
@@ -60,24 +62,24 @@ void Variable_Monitoring (void)
  */
 static void bms_variable_monitoring(bms_vars_states_t *p_Bms_States)
 {
-    p_Bms_States->voltaje = current_var_state(V_MAX_BMS, V_MIN_BMS, bus_data.Rx_Bms.voltaje, REGULAR_ZONE, p_Bms_States->voltaje);
+    p_Bms_States->voltaje = current_var_state(V_MAX_BMS, V_MIN_BMS, bus_data.Rx_Bms.voltaje, p_Bms_States->voltaje);
 
-    p_Bms_States->corriente = current_var_state(I_MAX_BMS, I_MIN_BMS, bus_data.Rx_Bms.corriente, REGULAR_ZONE, p_Bms_States->corriente);
+    p_Bms_States->corriente = current_var_state(I_MAX_BMS, I_MIN_BMS, bus_data.Rx_Bms.corriente, p_Bms_States->corriente);
     
-    p_Bms_States->voltaje_min_celda = current_var_state(P_MAX_BMS, P_MIN_BMS, bus_data.Rx_Bms.voltaje_min_celda, REGULAR_ZONE, p_Bms_States->voltaje_min_celda);
+    p_Bms_States->voltaje_min_celda = current_var_state(P_MAX_BMS, P_MIN_BMS, bus_data.Rx_Bms.voltaje_min_celda, p_Bms_States->voltaje_min_celda);
     
-    p_Bms_States->potencia = current_var_state(T_MAX_BMS, T_MIN_BMS, bus_data.Rx_Bms.potencia, REGULAR_ZONE, p_Bms_States->potencia);
+    p_Bms_States->potencia = current_var_state(T_MAX_BMS, T_MIN_BMS, bus_data.Rx_Bms.potencia, p_Bms_States->potencia);
     
-    p_Bms_States->t_max = current_var_state(V_CELDA_MAX_BMS, V_CELDA_MIN_BMS, bus_data.Rx_Bms.t_max, REGULAR_ZONE, p_Bms_States->t_max);
+    p_Bms_States->t_max = current_var_state(V_CELDA_MAX_BMS, V_CELDA_MIN_BMS, bus_data.Rx_Bms.t_max, p_Bms_States->t_max);
     
-    p_Bms_States->nivel_bateria = current_var_state(NIV_BAT_MAX_BMS, NIV_BAT_MIN_BMS, bus_data.Rx_Bms.nivel_bateria, REGULAR_ZONE, p_Bms_States->nivel_bateria);
+    p_Bms_States->nivel_bateria = current_var_state(NIV_BAT_MAX_BMS, NIV_BAT_MIN_BMS, bus_data.Rx_Bms.nivel_bateria, p_Bms_States->nivel_bateria);
 }
 
 
 /**
  * @brief Monitoreo de las variables decodificadas del DCDC
  * 
- * Actualiza estados de las variables decodificadas del DCDC de acuerdo a sus valores actuales, 
+ * Actualiza los estados de las variables decodificadas del DCDC de acuerdo a sus valores actuales, 
  * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura de tipo dcdc_vars_states_t.
  * 
@@ -85,14 +87,16 @@ static void bms_variable_monitoring(bms_vars_states_t *p_Bms_States)
  */
 static void dcdc_variable_monitoring(dcdc_vars_states_t *p_Dcdc_States)
 {
-    asm("nop");
+    p_Dcdc_States->voltaje_bateria = current_var_state(V_BAT_MAX_DCDC, V_BAT_MIN_DCDC, bus_data.Rx_Dcdc.voltaje_bateria, p_Dcdc_States->voltaje_bateria);
+    
+    p_Dcdc_States->t_max = current_var_state(T_MAX_DCDC, T_MIN_DCDC, bus_data.Rx_Dcdc.t_max, p_Dcdc_States->t_max);
 }
 
 
 /**
  * @brief Monitoreo de las variables decodificadas del inversor
  * 
- * Actualiza estados de las variables decodificadas del inversor de acuerdo a sus valores actuales, 
+ * Actualiza los estados de las variables decodificadas del inversor de acuerdo a sus valores actuales, 
  * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura de tipo inversor_vars_states_t.
  * 
@@ -100,7 +104,17 @@ static void dcdc_variable_monitoring(dcdc_vars_states_t *p_Dcdc_States)
  */
 static void inversor_variable_monitoring(inversor_vars_states_t *p_Inversor_States)
 {
-    asm("nop");
+    p_Inversor_States->velocidad = current_var_state(VEL_MAX_INV, VEL_MIN_INV, bus_data.Rx_Inversor.velocidad, p_Inversor_States->velocidad);
+
+    p_Inversor_States->V = current_var_state(V_MAX_INV, V_MIN_INV, bus_data.Rx_Inversor.V, p_Inversor_States->V);
+    
+    p_Inversor_States->I = current_var_state(I_MAX_INV, I_MIN_INV, bus_data.Rx_Inversor.I, p_Inversor_States->I);
+    
+    p_Inversor_States->temp_max = current_var_state(T_MAX_INV, T_MIN_INV, bus_data.Rx_Inversor.temp_max, p_Inversor_States->temp_max);
+    
+    p_Inversor_States->temp_motor = current_var_state(T_MAX_MOTOR, T_MIN_MOTOR, bus_data.Rx_Inversor.temp_motor, p_Inversor_States->temp_motor);
+    
+    p_Inversor_States->potencia = current_var_state(P_MAX_INV, P_MIN_INV, bus_data.Rx_Inversor.potencia, p_Inversor_States->potencia);
 }
 
 
@@ -110,16 +124,15 @@ static void inversor_variable_monitoring(inversor_vars_states_t *p_Inversor_Stat
  * @param D_max Valor máximo de la variable
  * @param D_min Valor mínimo de la variable
  * @param Data  Valor actual de la variable 
- * @param reg_percent Porcentaje de zona regular
  * @return var_state Estado actual de la variable
  */
-static var_state current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Data, rx_var_t reg_percent, var_state current_state)
+static var_state current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Data, var_state current_state)
 {
     if(current_state == DATA_PROBLEM){
         return DATA_PROBLEM;
     }else{
         var_state resultado;
-        resultado = comparaciones(D_max,  D_min, Data, reg_percent); 
+        resultado = comparaciones(D_max,  D_min, Data); 
         return resultado;
     }
 }
@@ -131,19 +144,18 @@ static var_state current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Data
  * @param D_max Valor máximo de la variable
  * @param D_min Valor mínimo de la variable
  * @param Data  Valor actual de la variable 
- * @param reg_percent Porcentaje de zona regular
  * @return var_state Estado actual de la variable
  */
-static var_state comparaciones (rx_var_t D_max, rx_var_t D_min, rx_var_t Data, rx_var_t reg_percent){
+static var_state comparaciones (rx_var_t D_max, rx_var_t D_min, rx_var_t Data){
 
-    if((Data < (D_max * (-reg_percent + 1))) & (Data > (D_min*(reg_percent + 1)))) {
+    if((Data < (D_max * (-REGULAR_ZONE + 1))) & (Data > (D_min*(REGULAR_ZONE + 1)))) {
         return OK; 
 
-    }else if((Data > (D_max * (reg_percent + 1))) | (Data < (D_min*(-reg_percent + 1)))) {
+    }else if((Data > (D_max * (REGULAR_ZONE + 1))) | (Data < (D_min*(-REGULAR_ZONE + 1)))) {
         return REGULAR; 
 
-    }else if(((Data < (D_max * (reg_percent + 1))) & (Data > (D_max * (-reg_percent + 1))))  | 
-    ((Data > (D_min*(-reg_percent + 1))) & (Data < (D_min*(reg_percent + 1))))){
+    }else if(((Data < (D_max * (REGULAR_ZONE + 1))) & (Data > (D_max * (-REGULAR_ZONE + 1))))  | 
+    ((Data > (D_min*(-REGULAR_ZONE + 1))) & (Data < (D_min*(REGULAR_ZONE + 1))))){
         return PROBLEM; 
 
     }else{
