@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "decode_data.h"
+#include "decode_data_api.h"
 #include "variable_monitoring.h"
 
-/* CAN ID*/
+/* CAN ID */
 
 /* ID Transmit */
 #define ID_ESTADO_MANEJO 			0x010
