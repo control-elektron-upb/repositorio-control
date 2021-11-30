@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"variable_monitoring.h": "c",
+			"def_buses.h": "c",
+			"decode_data.h": "c",
+			"receive_data.h": "c"
+		}
+	}
+}

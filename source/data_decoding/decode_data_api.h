@@ -35,7 +35,8 @@ typedef enum
 }buttons_state_t;
 
 /**
- * @brief Tipo de dato module_info_t para variable info de cada módulo
+ * @brief Tipo de dato module_info_t para variable info de cada módulo: 
+ * periféricos, BMS, DCDC, inversor.
  * 
  */
 typedef enum
@@ -56,7 +57,7 @@ typedef enum
 
 
 /**
- * @brief Definición tipo de estructura para variables decodificadas de Periféricos
+ * @brief Definición tipo de estructura para variables decodificadas de periféricos
  * 
  */
 typedef struct
@@ -71,7 +72,7 @@ typedef struct
 
 
 /**
- * @brief Definición tipo de estructura para variables decodificadas de BMS
+ * @brief Definición tipo de estructura para variables decodificadas del BMS
  * 
  */
 typedef struct
@@ -89,7 +90,7 @@ typedef struct
 
 
 /**
- * @brief Definición tipo de estructura para variables decodificadas de DCDC
+ * @brief Definición tipo de estructura para variables decodificadas del DCDC
  * 
  */
 typedef struct 
@@ -103,7 +104,7 @@ typedef struct
 
 
 /**
- * @brief Definición tipo de estructura para variables decodificadas de Inversor
+ * @brief Definición tipo de estructura para variables decodificadas del inversor
  * 
  */
 typedef struct 
