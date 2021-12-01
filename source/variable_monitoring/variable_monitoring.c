@@ -112,3 +112,23 @@ static var_state comparaciones (float D_max, float D_min, float Data){
 
     }
 }
+
+//matriz de los valores de las variables
+
+int i,j;
+int Value_buffer = 3;
+char buffer[20,20];
+for(i=0;i++;i==13){
+    for(j=0;j++;j==buffer_memoria){
+        buffer[i,j]
+    }
+}
+/*
+// V_bms -> buffer[1,0]
+//
+//if value buffer=3
+[ OK PROBLEM OK]
+//if(OK>PROBLEM){
+    return OK;
+
+}*/
