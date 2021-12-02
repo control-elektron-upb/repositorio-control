@@ -158,3 +158,23 @@ static var_state_t current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Da
         return DATA_PROBLEM;
     }
 }
+
+//matriz de los valores de las variables
+
+int i,j;
+int Value_buffer = 3;
+char buffer[20,20];
+for(i=0;i++;i==13){
+    for(j=0;j++;j==buffer_memoria){
+        buffer[i,j]
+    }
+}
+/*
+// V_bms -> buffer[1,0]
+//
+//if value buffer=3
+[ OK PROBLEM OK]
+//if(OK>PROBLEM){
+    return OK;
+
+}*/
