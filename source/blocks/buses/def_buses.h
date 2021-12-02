@@ -70,7 +70,7 @@
  * - Monitoreo de variables
  * - Generación de indicadores
  */
-typedef struct
+typedef struct bus1
 {
     /* Variables máquinas modo de manejo y fallas */
     driving_mode_t          driving_mode;
@@ -127,7 +127,8 @@ typedef enum
  * - Harvester
  * 
  */
-typedef struct{
+typedef struct bus2
+{
 
     uint8_t  autokill;          /**< Salida CAN  0x001 */              
 	uint8_t  estado_manejo; 	/**< Salida CAN  0x010 */
@@ -152,7 +153,7 @@ typedef struct{
  * - Harvester
  * 
  */
-typedef struct
+typedef struct bus3
 {
 	uint8_t  pedal;						/**< CAN 0x002 */
 	uint8_t  dead_man;					/**< CAN 0x003 */
