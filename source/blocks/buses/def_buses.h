@@ -16,6 +16,11 @@
 #include <stdbool.h>
 
 #include "receive_data.h"
+#include "decode_data.h"
+#include "variable_monitoring.h"
+#include "driving_modes.h"
+#include "failures.h"
+#include "rampa_pedal.h"
 
 /*******************************************************************************
  * Constants

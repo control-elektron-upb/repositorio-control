@@ -7,7 +7,7 @@
 #define _RAMPA_PEDAL_H_
 
 #include <math.h>
-#include "buses/def_buses.h"
+#include "def_buses.h"
 
 
 float get_velocidad_inversor(void);
