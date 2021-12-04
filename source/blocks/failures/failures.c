@@ -37,7 +37,7 @@ static var_state_t dcdc_current_status(void);
 
 static var_state_t inversor_current_status(void);
 
-static bool EV_AUTOKILL(void);
+static bool ev_autokill(void);
 
 static void FAILURES_SM_Send_Failure(failure_t to_send, typedef_bus1_t *p_bus_data);
 
@@ -58,7 +58,7 @@ void FAILURES_SM(void)
         /* Actualiza falla a OK en bus_data */
         FAILURES_SM_Send_Failure(OK, &bus_data);
 
-        if (EV_AUTOKILL()) {
+        if (ev_autokill()) {
             Failures_state = kAUTOKILL;
         }
         else if ( bms_current_status() == PROBLEM 
@@ -78,7 +78,7 @@ void FAILURES_SM(void)
         /* Actualiza falla a CAUTION1 en bus_data */
         FAILURES_SM_Send_Failure(CAUTION1, &bus_data);
 
-        if (EV_AUTOKILL) {
+        if (ev_autokill) {
             Failures_state = kAUTOKILL;
         }
         else if ( bms_current_status() == PROBLEM 
@@ -98,7 +98,7 @@ void FAILURES_SM(void)
         /* Actualiza falla a CAUTION2 en bus_data */
         FAILURES_SM_Send_Failure(CAUTION2, &bus_data);
 
-        if (EV_AUTOKILL) {
+        if (ev_autokill) {
             Failures_state = kAUTOKILL;
         }
         else if ( (bms_current_status() == REGULAR || bms_current_status() == OK)
@@ -230,7 +230,7 @@ static var_state_t inversor_current_status(void)
  * @return true 
  * @return false 
  */
-static bool EV_AUTOKILL(void)
+static bool ev_autokill(void)
 {
     return (bms_current_status() == PROBLEM 
             && dcdc_current_status() == PROBLEM 
