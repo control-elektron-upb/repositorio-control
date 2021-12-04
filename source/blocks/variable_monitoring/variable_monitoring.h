@@ -125,7 +125,7 @@ typedef enum
  * @brief Tipo de estructura para estado de las variables del BMS
  * 
  */
-typedef struct bms_vars_states_t
+typedef struct st_bms_vars_t
 {
     var_state_t voltaje;
     var_state_t corriente;
@@ -140,7 +140,7 @@ typedef struct bms_vars_states_t
  * @brief Tipo de estructura para estado de las variables del DCDC
  * 
  */
-typedef struct dcdc_vars_states_t
+typedef struct st_dcdc_vars_t
 {
     var_state_t voltaje_bateria;
     var_state_t t_max;
@@ -151,7 +151,7 @@ typedef struct dcdc_vars_states_t
  * @brief Tipo de estructura para estado de las variables del inversor
  * 
  */
-typedef struct inversor_vars_states_t
+typedef struct st_inversor_vars_t
 {
     var_state_t velocidad;
     var_state_t V;

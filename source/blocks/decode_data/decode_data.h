@@ -12,7 +12,7 @@
 #ifndef _DECODE_DATA_H_
 #define _DECODE_DATA_H_
 
-#include "variable_monitoring.h"
+#include "def_buses.h"
 
 /*******************************************************************************
  * Types declarations
@@ -60,7 +60,7 @@ typedef enum
  * @brief Tipo de estructura para variables decodificadas de periféricos
  * 
  */
-typedef struct
+typedef struct rx_peripherals_vars_t
 {
     rx_var_t pedal;
     dead_man_state_t dead_man;
@@ -74,7 +74,7 @@ typedef struct
  * @brief Tipo de estructura para variables decodificadas del BMS
  * 
  */
-typedef struct
+typedef struct rx_bms_vars_t
 {
     rx_var_t voltaje;
     rx_var_t corriente;
@@ -91,7 +91,7 @@ typedef struct
  * @brief Tipo de estructura para variables decodificadas del DCDC
  * 
  */
-typedef struct
+typedef struct rx_dcdc_vars_t
 {
     rx_var_t voltaje_bateria;
     rx_var_t t_max;
@@ -104,7 +104,7 @@ typedef struct
  * @brief Tipo de estructura para variables decodificadas del inversor
  * 
  */
-typedef struct
+typedef struct rx_inversor_vars_t
 {
     rx_var_t velocidad;
     rx_var_t V;
