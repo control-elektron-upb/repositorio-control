@@ -9,6 +9,12 @@
  * 
  */
 
+/** @mainpage Arquitectura de Firmware v1.0
+ *
+ *  @image html arquitectura-firmware-control.png
+ * 
+*/
+
 #include <stdio.h>
 
 #include "def_buses.h"
