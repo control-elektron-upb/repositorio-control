@@ -50,8 +50,11 @@
 #define ID_BMS_OK					0x026
 
 #define ID_VOLTAJE_BATERIA_DCDC		0x030
+#define ID_VOLTAJE_SALIDA_DCDC		0x031
 #define ID_T_MAX_DCDC				0x032
 #define ID_DCDC_OK					0x033
+#define ID_POTENCIA_DCDC		    0x034
+
 
 #define ID_VELOCIDAD_INV			0x040	// 0-240 -> 0-60
 #define ID_V_INV					0x041
@@ -174,8 +177,10 @@ typedef struct bus3
 	uint8_t  bms_ok;					/**< CAN 0x026 */
 	
 	uint8_t  voltaje_bateria_dcdc;		/**< CAN 0x030 */
+	uint8_t  voltaje_salida_dcdc;		/**< CAN 0x031 */
 	uint8_t  t_max_dcdc;				/**< CAN 0x032 */
 	uint8_t  dcdc_ok;					/**< CAN 0x033 */
+	uint8_t  potencia_dcdc;		        /**< CAN 0x034 */
 
 	uint8_t  velocidad_inv;				/**< CAN 0x040 */
 	uint8_t  V_inv;						/**< CAN 0x041 */

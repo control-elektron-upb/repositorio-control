@@ -63,6 +63,18 @@
 /** @brief Valor mínimo voltaje batería DCDC */
 #define V_BAT_MIN_DCDC 0
 
+/** @brief Valor máximo voltaje batería DCDC */
+#define V_OUT_MAX_DCDC 0
+
+/** @brief Valor mínimo voltaje batería DCDC */
+#define V_OUT_MIN_DCDC 0
+
+/** @brief Valor máximo voltaje batería DCDC */
+#define P_MAX_DCDC 0
+
+/** @brief Valor mínimo voltaje batería DCDC */
+#define P_MIN_DCDC 0
+
 /** @brief Valor máximo temperatura DCDC*/
 #define T_MAX_DCDC 0
 
@@ -143,6 +155,8 @@ typedef struct st_bms_vars_t
 typedef struct st_dcdc_vars_t
 {
     var_state_t voltaje_bateria;
+    var_state_t voltaje_salida;
+    var_state_t potencia;
     var_state_t t_max;
 
 } st_dcdc_vars_t;

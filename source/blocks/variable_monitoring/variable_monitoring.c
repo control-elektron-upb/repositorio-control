@@ -104,6 +104,10 @@ static void dcdc_variable_monitoring()
 {
     p_St_Dcdc->voltaje_bateria = current_var_state(V_BAT_MAX_DCDC, V_BAT_MIN_DCDC, p_Rx_Dcdc->voltaje_bateria);
 
+    p_St_Dcdc->voltaje_salida = current_var_state(V_OUT_MAX_DCDC, V_OUT_MIN_DCDC, p_Rx_Dcdc->voltaje_salida);
+
+    p_St_Dcdc->potencia = current_var_state(P_MAX_DCDC, P_MIN_DCDC, p_Rx_Dcdc->potencia);
+
     p_St_Dcdc->t_max = current_var_state(T_MAX_DCDC, T_MIN_DCDC, p_Rx_Dcdc->t_max);
 }
 
