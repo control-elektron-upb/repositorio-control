@@ -146,12 +146,12 @@ static var_state_t current_var_state(rx_var_t D_max, rx_var_t D_min, rx_var_t Da
     }
     else if ((Data > (D_max * (REGULAR_ZONE + 1))) || (Data < (D_min * (-REGULAR_ZONE + 1))))
     {
-        return REGULAR;
+        return PROBLEM;
     }
     else if (((Data < (D_max * (REGULAR_ZONE + 1))) && (Data > (D_max * (-REGULAR_ZONE + 1)))) ||
              ((Data > (D_min * (-REGULAR_ZONE + 1))) && (Data < (D_min * (REGULAR_ZONE + 1)))))
     {
-        return PROBLEM;
+        return REGULAR;
     }
     else
     {
