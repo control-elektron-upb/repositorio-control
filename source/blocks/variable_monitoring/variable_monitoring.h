@@ -63,16 +63,16 @@
 /** @brief Valor mínimo voltaje batería DCDC */
 #define V_BAT_MIN_DCDC 0
 
-/** @brief Valor máximo voltaje batería DCDC */
+/** @brief Valor máximo voltaje salida DCDC */
 #define V_OUT_MAX_DCDC 0
 
-/** @brief Valor mínimo voltaje batería DCDC */
+/** @brief Valor mínimo voltaje salida DCDC */
 #define V_OUT_MIN_DCDC 0
 
-/** @brief Valor máximo voltaje batería DCDC */
+/** @brief Valor máximo potencia DCDC */
 #define P_MAX_DCDC 0
 
-/** @brief Valor mínimo voltaje batería DCDC */
+/** @brief Valor mínimo potencia DCDC */
 #define P_MIN_DCDC 0
 
 /** @brief Valor máximo temperatura DCDC*/
