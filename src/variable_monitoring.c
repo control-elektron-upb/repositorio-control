@@ -1,7 +1,7 @@
 /**
  * @file variable_monitoring.c
- * @author Andrés
- * @brief Implementación monitoreo de variables decodificadas
+ * @author Andrï¿½s
+ * @brief Implementaciï¿½n monitoreo de variables decodificadas
  * @version 0.1
  * @date 2021-11-27
  *
@@ -68,7 +68,7 @@ void VARIABLE_MONITORING(void)
  * @brief Monitoreo de las variables decodificadas del BMS
  *
  * Actualiza los estados de las variables decodificadas del BMS de acuerdo a sus valores actuales,
- * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * lï¿½mites mï¿½ximo y mï¿½nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura St_Bms de tipo st_bms_vars_t que se encuentra en el bus_data.
  *
  */
@@ -91,7 +91,7 @@ static void bms_variable_monitoring()
  * @brief Monitoreo de las variables decodificadas del DCDC
  *
  * Actualiza los estados de las variables decodificadas del DCDC de acuerdo a sus valores actuales,
- * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * lï¿½mites mï¿½ximo y mï¿½nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura St_Dcdc de tipo st_dcdc_vars_t que se encuentra en el bus_data.
  *
  */
@@ -110,7 +110,7 @@ static void dcdc_variable_monitoring()
  * @brief Monitoreo de las variables decodificadas del inversor
  *
  * Actualiza los estados de las variables decodificadas del inversor de acuerdo a sus valores actuales,
- * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * lï¿½mites mï¿½ximo y mï¿½nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura de St_Inverosor de tipo st_inversor_vars_t que se encuentra en el bus_data.
  *
  */
@@ -130,10 +130,10 @@ static void inversor_variable_monitoring()
 }
 
 /**
- * @brief Función para determinar el estado actual de la variable a evaluar
+ * @brief Funciï¿½n para determinar el estado actual de la variable a evaluar
  *
- * @param D_max Valor máximo de la variable
- * @param D_min Valor mínimo de la variable
+ * @param D_max Valor mï¿½ximo de la variable
+ * @param D_min Valor mï¿½nimo de la variable
  * @param Data  Valor actual de la variable
  * @return var_state_t Estado actual de la variable
  */
@@ -145,12 +145,12 @@ static var_state_t current_variable_state(rx_var_t D_max, rx_var_t D_min, rx_var
     }
     else if ((Data > (D_max * (REGULAR_ZONE + 1))) || (Data < (D_min * (-REGULAR_ZONE + 1))))
     {
-        return kVarState_REGULAR;
+        return kVarState_PROBLEM;
     }
     else if (((Data < (D_max * (REGULAR_ZONE + 1))) && (Data > (D_max * (-REGULAR_ZONE + 1)))) ||
         ((Data > (D_min * (-REGULAR_ZONE + 1))) && (Data < (D_min * (REGULAR_ZONE + 1)))))
     {
-        return kVarState_PROBLEM;
+        return kVarState_REGULAR;
     }
     else
     {
