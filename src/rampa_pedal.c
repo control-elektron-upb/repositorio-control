@@ -1,7 +1,7 @@
 /**
  * @file rampa_pedal.c
  * @author Subgrupo Control
- * @brief Implementación rampa pedal
+ * @brief Implementaciï¿½n rampa pedal
  * @version 0.1
  * @date 2021-12-03
  *
@@ -22,7 +22,7 @@
 /** @brief Velocidad calculada de la rampa pedal */
 static uint8_t velocidad_inversor;
 
-/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de periféricos */
+/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de perifï¿½ricos */
 static rx_peripherals_vars_t* p_Rx_Peripherals = &bus_data.Rx_Peripherals;
 
 /***********************************************************************************************************************
@@ -78,12 +78,12 @@ void RAMPA_PEDAL(void)
 /**
  * @brief Rampa pedal para modo ECO
  *
- * @param pedal Pedal de periféricos
+ * @param pedal Pedal de perifï¿½ricos
  * @return uint8_t Velocidad [0:100]
  */
 static uint8_t rampa_eco(rx_var_t pedal) {
 
-    float velocidad;
+    float velocidad = 0;
 
     if (pedal >= 0 && pedal < 20)
     {
@@ -112,12 +112,12 @@ static uint8_t rampa_eco(rx_var_t pedal) {
 /**
  * @brief Rampa pedal para modo NORMAL
  *
- * @param pedal Pedal de periféricos
+ * @param pedal Pedal de perifï¿½ricos
  * @return uint8_t Velocidad [0:100]
  */
 static uint8_t rampa_normal(rx_var_t pedal) {
 
-    float velocidad;
+    float velocidad = 0;
 
     if (pedal >= 0 && pedal < 20)
     {
@@ -146,12 +146,12 @@ static uint8_t rampa_normal(rx_var_t pedal) {
 /**
  * @brief Rampa pedal para modo SPORT
  *
- * @param pedal Pedal de periféricos
+ * @param pedal Pedal de perifï¿½ricos
  * @return uint8_t Velocidad [0:100]
  */
 static uint8_t rampa_sport(rx_var_t pedal) {
 
-    float velocidad;
+    float velocidad = 0;
 
     if (pedal >= 0 && pedal < 20)
     {
@@ -180,7 +180,7 @@ static uint8_t rampa_sport(rx_var_t pedal) {
 /**
  * @brief Rampa pedal en caso de hombre muerto presionado
  *
- * @param pedal Pedal de periféricos
+ * @param pedal Pedal de perifï¿½ricos
  * @return uint8_t Velocidad
  */
 static uint8_t rampa_deadman(rx_var_t pedal) {
@@ -188,7 +188,7 @@ static uint8_t rampa_deadman(rx_var_t pedal) {
 }
 
 /**
- * @brief Envío de velocidad al bus de datos
+ * @brief Envï¿½o de velocidad al bus de datos
  *
  * @param to_send       Velocidad a enviar
  * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
