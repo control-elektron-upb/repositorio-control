@@ -254,19 +254,22 @@ static var_state_t bms_current_status(void)
 static var_state_t dcdc_current_status(void)
 {
     /* condición OK */
-    if (p_St_Dcdc->t_max == kVarState_OK && p_St_Dcdc->voltaje_bateria == kVarState_OK)
+    if (p_St_Dcdc->voltaje_bateria == kVarState_OK && p_St_Dcdc->voltaje_salida == kVarState_OK
+        && p_St_Dcdc->t_max == kVarState_OK && p_St_Dcdc->potencia == kVarState_OK)
     {
         return kVarState_OK;
     }
 
     /* condición REGULAR */
-    else if (p_St_Dcdc->t_max == kVarState_REGULAR || p_St_Dcdc->voltaje_bateria == kVarState_REGULAR)
+    else if (p_St_Dcdc->voltaje_bateria == kVarState_REGULAR || p_St_Dcdc->voltaje_salida == kVarState_REGULAR
+            || p_St_Dcdc->t_max == kVarState_REGULAR || p_St_Dcdc->potencia == kVarState_REGULAR)
     {
         return kVarState_REGULAR;
     }
 
     /* condición PROBLEM */
-    else if (p_St_Dcdc->t_max == kVarState_PROBLEM || p_St_Dcdc->voltaje_bateria == kVarState_PROBLEM)
+    else if (p_St_Dcdc->voltaje_bateria == kVarState_PROBLEM || p_St_Dcdc->voltaje_salida == kVarState_PROBLEM
+            || p_St_Dcdc->t_max == kVarState_PROBLEM || p_St_Dcdc->potencia == kVarState_PROBLEM)
     {
         return kVarState_PROBLEM;
     }
@@ -318,7 +321,6 @@ static var_state_t inversor_current_status(void)
     {
         return kVarState_DATA_PROBLEM;
     }
-
 }
 
 /**
