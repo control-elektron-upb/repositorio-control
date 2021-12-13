@@ -1,6 +1,6 @@
 /**
  * @file variable_monitoring.h
- * @author Andrés
+ * @author AndrÃ©s
  * @brief Declaraciones monitoreo de variables decodificadas
  * @version 0.1
  * @date 2021-11-27
@@ -27,104 +27,104 @@
 
 /* ------------------------- BMS ------------------------- */
 
-/** @brief Valor máximo voltaje BMS */
+/** @brief Valor mÃ¡ximo voltaje BMS */
 #define V_MAX_BMS 0
 
-/** @brief Valor mínimo voltaje BMS */
+/** @brief Valor mÃ­nimo voltaje BMS */
 #define V_MIN_BMS 0
 
-/** @brief Valor máximo corriente BMS */
+/** @brief Valor mÃ¡ximo corriente BMS */
 #define I_MAX_BMS 0
 
-/** @brief Valor mínimo corriente BMS */
+/** @brief Valor mÃ­nimo corriente BMS */
 #define I_MIN_BMS 0
 
-/** @brief Valor máximo potencia BMS */
+/** @brief Valor mÃ¡ximo potencia BMS */
 #define P_MAX_BMS 0
 
-/** @brief Valor mínimo potencia BMS */
+/** @brief Valor mÃ­nimo potencia BMS */
 #define P_MIN_BMS 0
 
-/** @brief Valor máximo temperatura BMS */
+/** @brief Valor mÃ¡ximo temperatura BMS */
 #define T_MAX_BMS 0
 
-/** @brief Valor mínimo temperatura BMS */
+/** @brief Valor mÃ­nimo temperatura BMS */
 #define T_MIN_BMS 0
 
-/** @brief Valor máximo voltaje celda BMS */
+/** @brief Valor mÃ¡ximo voltaje celda BMS */
 #define V_CELDA_MAX_BMS 0
 
-/** @brief Valor mínimo voltaje celda BMS */
+/** @brief Valor mÃ­nimo voltaje celda BMS */
 #define V_CELDA_MIN_BMS 0
 
-/** @brief Valor máximo nivel batería BMS */
+/** @brief Valor mÃ¡ximo nivel baterÃ­a BMS */
 #define NIV_BAT_MAX_BMS 0
 
-/** @brief Valor mínimo nivel batería BMS */
+/** @brief Valor mÃ­nimo nivel baterÃ­a BMS */
 #define NIV_BAT_MIN_BMS 0
 
 /* ------------------------- DCDC ------------------------- */
 
-/** @brief Valor máximo voltaje batería DCDC */
+/** @brief Valor mÃ¡ximo voltaje baterÃ­a DCDC */
 #define V_BAT_MAX_DCDC 0
 
-/** @brief Valor mínimo voltaje batería DCDC */
+/** @brief Valor mÃ­nimo voltaje baterÃ­a DCDC */
 #define V_BAT_MIN_DCDC 0
 
-/** @brief Valor máximo voltaje salida DCDC */
+/** @brief Valor mÃ¡ximo voltaje salida DCDC */
 #define V_OUT_MAX_DCDC 0
 
-/** @brief Valor mínimo voltaje salida DCDC */
+/** @brief Valor mÃ­nimo voltaje salida DCDC */
 #define V_OUT_MIN_DCDC 0
 
-/** @brief Valor máximo temperatura DCDC */
+/** @brief Valor mÃ¡ximo temperatura DCDC */
 #define T_MAX_DCDC 0
 
-/** @brief Valor mínimo temperatura DCDC */
+/** @brief Valor mÃ­nimo temperatura DCDC */
 #define T_MIN_DCDC 0
 
-/** @brief Valor máximo potencia DCDC */
+/** @brief Valor mÃ¡ximo potencia DCDC */
 #define P_MAX_DCDC 0
 
-/** @brief Valor mínimo potencia DCDC */
+/** @brief Valor mÃ­nimo potencia DCDC */
 #define P_MIN_DCDC 0
 
 /* ----------------------- INVERSOR ----------------------- */
 
-/** @brief Valor máximo velocidad inversor */
+/** @brief Valor mÃ¡ximo velocidad inversor */
 #define VEL_MAX_INV 0
 
-/** @brief Valor mínimo velocidad inversor */
+/** @brief Valor mÃ­nimo velocidad inversor */
 #define VEL_MIN_INV 0
 
-/** @brief Valor máximo temperatura motor */
+/** @brief Valor mÃ¡ximo temperatura motor */
 #define T_MAX_MOTOR 0
 
-/** @brief Valor mínimo temperatura motor */
+/** @brief Valor mÃ­nimo temperatura motor */
 #define T_MIN_MOTOR 0
 
-/** @brief Valor máximo voltaje inversor */
+/** @brief Valor mÃ¡ximo voltaje inversor */
 #define V_MAX_INV 0
 
-/** @brief Valor mínimo voltaje inversor */
+/** @brief Valor mÃ­nimo voltaje inversor */
 #define V_MIN_INV 0
 
-/** @brief Valor máximo corriente inversor */
+/** @brief Valor mÃ¡ximo corriente inversor */
 #define I_MAX_INV 0
 
-/** @brief Valor mínimo corriente inversor */
+/** @brief Valor mÃ­nimo corriente inversor */
 #define I_MIN_INV 0
 
-/** @brief Valor máximo temperatura inversor */
+/** @brief Valor mÃ¡ximo temperatura inversor */
 #define T_MAX_INV 0
 
-/** @brief Valor mínimo temperatura inversor */
+/** @brief Valor mÃ­nimo temperatura inversor */
 #define T_MIN_INV 0
 
-/** @brief Valor máximo potencia inversor */
+/** @brief Valor mÃ¡ximo potencia inversor */
 #define P_MAX_INV 0
 
-/** @brief Valor mínimo potencia inversor */
+/** @brief Valor mÃ­nimo potencia inversor */
 #define P_MIN_INV 0
 
 /***********************************************************************************************************************
@@ -132,12 +132,15 @@
  **********************************************************************************************************************/
 
 /**
- * @brief Función principal de monitoreo de variables
+ * @brief FunciÃ³n principal de monitoreo de variables.
  *
- * Determina los estados de las variables decodificadas del BMS, DCDC e inversor y
- * los guarda en una estructura de tipo st_bms_vars_t. No es static, por lo que
- * puede ser usada por otros archivos.
- *
+ * Determina los estados de las variables decodificadas del BMS, DCDC, e inversor y
+ * los guarda en el bus_data en estructuras de tipo st_bms_vars_t, st_dcdc_vars_t, 
+ * y st_inversor_vars_t. Estas estructuras son St_Bms, St_Dcdc, y St_Inversor.
+ * No es static, por lo que puede ser usada por otros archivos.
+ * 
+ * @param None
+ * @retval None
  */
 void VARIABLE_MONITORING(void);
 

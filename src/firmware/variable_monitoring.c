@@ -1,7 +1,7 @@
 /**
  * @file variable_monitoring.c
- * @author Andr�s
- * @brief Implementaci�n monitoreo de variables decodificadas
+ * @author Andrés
+ * @brief Implementación monitoreo de variables decodificadas
  * @version 0.1
  * @date 2021-11-27
  *
@@ -53,11 +53,22 @@ static var_state_t current_variable_state(rx_var_t D_max, rx_var_t D_min, rx_var
  * Public functions implementation
  **********************************************************************************************************************/
 
+/**
+ * @brief Función principal de monitoreo de variables.
+ *
+ * Determina los estados de las variables decodificadas del BMS, DCDC, e inversor y
+ * los guarda en el bus_data en estructuras de tipo st_bms_vars_t, st_dcdc_vars_t, 
+ * y st_inversor_vars_t. Estas estructuras son St_Bms, St_Dcdc, y St_Inversor.
+ * No es static, por lo que puede ser usada por otros archivos.
+ * 
+ * @param None
+ * @retval None
+ */
 void VARIABLE_MONITORING(void)
 {
-    bms_variable_monitoring();      /* Actualiza estado de las variables del BMS */
-    dcdc_variable_monitoring();     /* Actualiza estado de las variables del DCDC */
-    inversor_variable_monitoring(); /* Actualiza estado de las variables del inversor */
+    bms_variable_monitoring();      // Actualiza estado de las variables del BMS
+    dcdc_variable_monitoring();     // Actualiza estado de las variables del DCDC
+    inversor_variable_monitoring(); // Actualiza estado de las variables del inversor
 }
 
 /***********************************************************************************************************************
@@ -68,7 +79,7 @@ void VARIABLE_MONITORING(void)
  * @brief Monitoreo de las variables decodificadas del BMS
  *
  * Actualiza los estados de las variables decodificadas del BMS de acuerdo a sus valores actuales,
- * l�mites m�ximo y m�nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura St_Bms de tipo st_bms_vars_t que se encuentra en el bus_data.
  *
  */
@@ -91,7 +102,7 @@ static void bms_variable_monitoring()
  * @brief Monitoreo de las variables decodificadas del DCDC
  *
  * Actualiza los estados de las variables decodificadas del DCDC de acuerdo a sus valores actuales,
- * l�mites m�ximo y m�nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura St_Dcdc de tipo st_dcdc_vars_t que se encuentra en el bus_data.
  *
  */
@@ -110,7 +121,7 @@ static void dcdc_variable_monitoring()
  * @brief Monitoreo de las variables decodificadas del inversor
  *
  * Actualiza los estados de las variables decodificadas del inversor de acuerdo a sus valores actuales,
- * l�mites m�ximo y m�nimo y porcentaje de zona regular. Dichos estados son guardados por referencia
+ * límites máximo y mínimo y porcentaje de zona regular. Dichos estados son guardados por referencia
  * en la estructura de St_Inverosor de tipo st_inversor_vars_t que se encuentra en el bus_data.
  *
  */
@@ -130,10 +141,10 @@ static void inversor_variable_monitoring()
 }
 
 /**
- * @brief Funci�n para determinar el estado actual de la variable a evaluar
+ * @brief Función para determinar el estado actual de la variable a evaluar
  *
- * @param D_max Valor m�ximo de la variable
- * @param D_min Valor m�nimo de la variable
+ * @param D_max Valor máximo de la variable
+ * @param D_min Valor mínimo de la variable
  * @param Data  Valor actual de la variable
  * @return var_state_t Estado actual de la variable
  */
