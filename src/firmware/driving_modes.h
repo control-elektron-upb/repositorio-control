@@ -1,7 +1,7 @@
 /**
  * @file driving_modes.h
  * @author Juan
- * @brief Declaraciones máquina modos de manejo
+ * @brief Declaraciones mÃ¡quina modos de manejo
  * @version 0.1
  * @date 2021-12-01
  *
@@ -22,7 +22,7 @@
  * Types declarations
  **********************************************************************************************************************/
 
-/** @brief Estados posibles de la máquina de estados */
+/** @brief Estados posibles de la mÃ¡quina de estados */
 enum DrivingModes_States
 {
     kINIT = 0, /**< Estado de init */
@@ -38,7 +38,7 @@ enum DrivingModes_States
 typedef enum
 {
     NOT_READY = 0, /**< Esperando respuesta echo */
-    IM_READY = 1   /**< Todos los módulos OK, Control listo! */
+    IM_READY = 1   /**< Todos los mÃ³dulos OK, Control listo! */
 } control_status_t;
 
 /***********************************************************************************************************************
@@ -46,23 +46,25 @@ typedef enum
  **********************************************************************************************************************/
 
 /**
- * @brief Función principal máquina de modos de manejo
+ * @brief FunciÃ³n principal mÃ¡quina de modos de manejo.
  *
- * Llama a la función máquina de estados de modos de manejo. No es static, por
+ * Llama a la funciÃ³n mÃ¡quina de estados de modos de manejo. No es static, por
  * lo que puede ser usada por otros archivos.
- *
+ * 
+ * @param None
+ * @retval None
  */
 void DRIVING_MODES(void);
 
 /**
- * @brief Lee estado de la máquina de estados de modo de manejo
+ * @brief Lee estado de la mÃ¡quina de estados de modo de manejo.
  *
- * Lee estado de la máquina de estados de modo de manejo. No es static, por lo
+ * Lee estado de la mÃ¡quina de estados de modo de manejo. No es static, por lo
  * que puede ser usada por otros archivos.
- *
- * @return uint8_t Estado de la máquina de estados
- *
+ * 
+ * @param None
+ * @return uint8_t Estado de la mÃ¡quina de estados
  */
-uint8_t get_DrivingModes_State(void);
+uint8_t DRIVING_MODES_GetState(void);
 
 #endif /* _DRIVING_MODES_H_ */

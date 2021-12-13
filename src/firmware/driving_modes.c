@@ -1,7 +1,7 @@
 /**
  * @file driving_modes.c
  * @author Juan
- * @brief ImplementaciÛn m·quina modos de manejo
+ * @brief Implementaci√≥n m√°quina modos de manejo
  * @version 0.1
  * @date 2021-12-01
  *
@@ -19,10 +19,10 @@
  * Private variables definitions
  **********************************************************************************************************************/
 
-/** @brief Estado de la m·quina de estados */
+/** @brief Estado de la m√°quina de estados */
 static uint8_t driving_modes_state = kINIT;
 
-/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de perifÈricos */
+/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de perif√©ricos */
 static rx_peripherals_vars_t* p_Rx_Peripherals = &bus_data.Rx_Peripherals;
 
 /** @brief Puntero a estructura de tipo rx_bms_vars_t que contiene los valores de las variables decodificadas del BMS */
@@ -52,12 +52,30 @@ static void DrivingModes_Send_ControlInfo(control_status_t to_send, typedef_bus1
  * Public functions implementation
  **********************************************************************************************************************/
 
+/**
+ * @brief Funci√≥n principal m√°quina de modos de manejo.
+ *
+ * Llama a la funci√≥n m√°quina de estados de modos de manejo. No es static, por
+ * lo que puede ser usada por otros archivos.
+ * 
+ * @param None
+ * @retval None
+ */
 void DRIVING_MODES(void)
 {
     DrivingModes_StateMachine();
 }
 
-uint8_t get_DrivingModes_State(void)
+/**
+ * @brief Lee estado de la m√°quina de estados de modo de manejo.
+ *
+ * Lee estado de la m√°quina de estados de modo de manejo. No es static, por lo
+ * que puede ser usada por otros archivos.
+ * 
+ * @param None
+ * @return uint8_t Estado de la m√°quina de estados
+ */
+uint8_t DRIVING_MODES_GetState(void)
 {
     return driving_modes_state;
 }
@@ -66,27 +84,27 @@ uint8_t get_DrivingModes_State(void)
  * Private functions implementation
  **********************************************************************************************************************/
 
- /**
-  * @brief M·quina de estados de modo de manejo
-  *
-  * Se encarga de permitir las transiciones entre los diferentes modos de manejo
-  * de acuerdo a los botones de perifÈricos y a la m·quina de fallas. Por defecto
-  * inicia en el estado kINIT, en el cual se realiza un echo y se espera a confirmaciÛn
-  * de los dem·s mÛdulos.
-  *
-  * Lee la variable buttons_change_state de la estructura de variables decodificadas
-  * de perifÈricos, es decir, la estructura de tipo rx_peripherals_t que se encuentra
-  * en el bus_data.
-  *
-  * Escribe en la variable driving_mode del bus_data.
-  * 
-  */
+/**
+ * @brief M√°quina de estados de modo de manejo
+ *
+ * Se encarga de permitir las transiciones entre los diferentes modos de manejo
+ * de acuerdo a los botones de perif√©ricos y a la m√°quina de fallas. Por defecto
+ * inicia en el estado kINIT, en el cual se realiza un echo y se espera a confirmaci√≥n
+ * de los dem√°s m√≥dulos.
+ *
+ * Lee la variable buttons_change_state de la estructura de variables decodificadas
+ * de perif√©ricos, es decir, la estructura de tipo rx_peripherals_t que se encuentra
+ * en el bus_data.
+ *
+ * Escribe en la variable driving_mode del bus_data.
+ * 
+ */
 static void DrivingModes_StateMachine(void)
 {
     switch (driving_modes_state)
     {
     case kINIT:
-        /* Espera confirmaciÛn de los dem·s mÛdulos */
+        /* Espera confirmaci√≥n de los dem√°s m√≥dulos */
         if (DrivingModes_WaitResponse_Echo() == IM_READY)
             driving_modes_state = kNORMAL;
         break;
@@ -139,7 +157,7 @@ static void DrivingModes_StateMachine(void)
 }
 
 /**
- * @brief EnvÌo de modo de manejo al bus de datos
+ * @brief Env√≠o de modo de manejo al bus de datos
  *
  * @param to_send       Modo de manejo a enviar
  * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
@@ -150,7 +168,7 @@ static void DrivingModes_Send_DrivingMode(driving_mode_t to_send, typedef_bus1_t
 }
 
 /**
- * @brief Realiza echo, espera confirmaciÛn respuesta de los dem·s mÛdulos
+ * @brief Realiza echo, espera confirmaci√≥n respuesta de los dem√°s m√≥dulos
  *
  * @return control_status_t Status de control
  */
@@ -160,7 +178,7 @@ static control_status_t DrivingModes_WaitResponse_Echo(void)
 
     control_status_t status = NOT_READY;
 
-    /* Echo a los dem·s mÛdulos */
+    /* Echo a los dem√°s m√≥dulos */
     DrivingModes_Send_Echo(&bus_can_output);
 
     printf("Esperando respuesta...\n");
@@ -170,11 +188,11 @@ static control_status_t DrivingModes_WaitResponse_Echo(void)
         /* Decodifica */
         /* Lee bus_data */
 
-        /* Si todos los mÛdulos OK y time_out TRUE ... */
+        /* Si todos los m√≥dulos OK y time_out TRUE ... */
         if (p_Rx_Peripherals->peripherals_ok == kInfo_OK && p_Rx_Bms->bms_ok == kInfo_OK
             && p_Rx_Dcdc->dcdc_ok == kInfo_OK && p_Rx_Inversor->inversor_ok == kInfo_OK)
         {
-            printf("Todos los mÛdulos OK\n");
+            printf("Todos los m√≥dulos OK\n");
             printf("...\n");
             //DrivingModes_Start_Timeout();
             if (time_out) {
@@ -183,7 +201,7 @@ static control_status_t DrivingModes_WaitResponse_Echo(void)
                 status = IM_READY;
             }
         }
-        /* EnvÌo info de control a bus_data */
+        /* Env√≠o info de control a bus_data */
         DrivingModes_Send_ControlInfo(status, &bus_data);
     }
     printf("Control OK\n");
@@ -191,10 +209,10 @@ static control_status_t DrivingModes_WaitResponse_Echo(void)
 }
 
 /**
- * @brief Realiza echo a los dem·s mÛdulos
+ * @brief Realiza echo a los dem√°s m√≥dulos
  *
- * Se envÌa por la direcciÛn CAN 0x014 (control_ok) el valor 0x01 un segundo despuÈs
- * de encenderse, despues el 0x00. Esto lo recibir· cada mÛdulo y responder·n.
+ * Se env√≠a por la direcci√≥n CAN 0x014 (control_ok) el valor 0x01 un segundo despu√©s
+ * de encenderse, despues el 0x00. Esto lo recibir√° cada m√≥dulo y responder√°n.
  *
  * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
  */
@@ -204,7 +222,7 @@ static void DrivingModes_Send_Echo(typedef_bus2_t* p_bus_can_output)
 }
 
 /**
- * @brief EnvÌo de status de control al bus de datos 
+ * @brief Env√≠o de status de control al bus de datos 
  *
  * @param to_send       Status de control a enviar
  * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
