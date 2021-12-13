@@ -26,7 +26,7 @@
  * Macros
  **********************************************************************************************************************/
 
-/* Tamaño de mensaje asíncrono */
+/* TamaÃ±o de mensaje asÃ­ncrono */
 #define LENGTH_ASYNC_MSG			5
 
 /****************************************
@@ -35,6 +35,7 @@
 
 /* ----------- ID Transmit ----------- */
 
+#define ID_AUTOKILL                 0x001
 #define ID_ESTADO_MANEJO 			0x010
 #define ID_ESTADO_FALLA				0x011
 #define ID_NIVEL_VELOCIDAD			0x012
@@ -77,18 +78,17 @@
  /**
   * @brief Bus 1: Bus de datos
   *
-  * - Parsing de datos (Decodificación data <- CAN)
+  * - Parsing de datos (DecodificaciÃ³n data <- CAN)
   * - Rampa pedal
   * - Maquina modo de manejo
   * - Maquina de fallas
   * - Monitoreo de variables
-  * - Generación de indicadores
+  * - GeneraciÃ³n de indicadores
   * 
   */
 typedef struct bus1
 {
-
-    /* Variables máquinas modo de manejo y fallas */
+    /* Variables mÃ¡quinas modo de manejo y fallas */
     driving_mode_t          driving_mode;
     failure_t               failure;
 
@@ -110,18 +110,17 @@ typedef struct bus1
 } typedef_bus1_t;
 
 /**
- * @brief Bus 2: Bus de transmisión de datos CAN
+ * @brief Bus 2: Bus de transmisiÃ³n de datos CAN
  *
- * - Transmisión datos CAN (Envío data asíncrono -> CAN)
- * - Envío nivel velocidad inversor
- * - Envío Auto kill
- * - Envío modo manejo
+ * - TransmisiÃ³n datos CAN (EnvÃ­o data asÃ­ncrono -> CAN)
+ * - EnvÃ­o nivel velocidad inversor
+ * - EnvÃ­o AutoKill
+ * - EnvÃ­o modo manejo
  * - Harvester
  *
  */
 typedef struct bus2
 {
-
     uint8_t  autokill;          /**< Salida CAN  0x001 */
     uint8_t  estado_manejo; 	/**< Salida CAN  0x010 */
     uint8_t  estado_falla; 		/**< Salida CAN  0x011 */
@@ -138,16 +137,15 @@ typedef struct bus2
 } typedef_bus2_t;
 
 /**
- * @brief Bus 3: Bus de recepción de datos CAN
+ * @brief Bus 3: Bus de recepciÃ³n de datos CAN
  *
- * - Recepción datos CAN
- * - Parsing de datos (CAN -> Decodificación data)
+ * - RecepciÃ³n datos CAN
+ * - Parsing de datos (CAN -> DecodificaciÃ³n data)
  * - Harvester
  *
  */
 typedef struct bus3
 {
-
     uint8_t  pedal;						/**< CAN 0x002 */
     uint8_t  dead_man;					/**< CAN 0x003 */
     uint8_t  buttons_change_state;		/**< CAN 0x004 */

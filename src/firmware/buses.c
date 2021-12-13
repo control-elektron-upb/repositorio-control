@@ -1,7 +1,7 @@
 /**
  * @file buses.c
  * @author Juan
- * @brief Implementaci髇 buses de arquitectura de firmware de Control 
+ * @brief Implementaci贸n buses de arquitectura de firmware de Control 
  * @version 0.1
  * @date 2021-11-30
  *
@@ -19,7 +19,7 @@
  * Buses initialization
  **********************************************************************************************************************/
 
-/* Inicializaci髇 de bus de datos (bus 1) */
+/* Inicializaci贸n de bus de datos (bus 1) */
 typedef_bus1_t bus_data =
 {
     /* Variable modo de manejo */
@@ -34,7 +34,7 @@ typedef_bus1_t bus_data =
     /* Variable info de control */
     .control_ok = kInfo_ERROR,
 
-    /* Estructura de perif閞icos */
+    /* Estructura de perif茅ricos */
     .Rx_Peripherals = {.buttons_change_state = kButton_NONE, .dead_man = kDeadMan_NOPRESS, .peripherals_ok = kInfo_ERROR},
 
     /* Estructuras de BMS */
@@ -50,8 +50,8 @@ typedef_bus1_t bus_data =
     .St_Inversor = {kVarState_DATA_PROBLEM}
 };
 
-/* Inicializaci髇 de bus de salida CAN (bus 2) */
+/* Inicializaci贸n de bus de salida CAN (bus 2) */
 typedef_bus2_t bus_can_output = { 0 };
 
-/* Inicializaci髇 de bus de recepci髇 CAN (bus 3) */
+/* Inicializaci贸n de bus de recepci贸n CAN (bus 3) */
 typedef_bus3_t bus_can_input = { 0 };
