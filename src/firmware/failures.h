@@ -1,7 +1,7 @@
 /**
  * @file failures.h
  * @author Juan
- * @brief Declaraciones máquina de fallas
+ * @brief Declaraciones mÃ¡quina de fallas
  * @version 0.1
  * @date 2021-12-01
  *
@@ -22,7 +22,7 @@
  * Types declarations
  **********************************************************************************************************************/
 
-/** @brief Estados posibles de la máquina de estados */
+/** @brief Estados posibles de la mÃ¡quina de estados */
 enum FailuresStates
 {
     kOK = 0,   /**< Estado falla OK */
@@ -31,28 +31,34 @@ enum FailuresStates
     kAUTOKILL  /**< Estado falla AUTOKILL */
 };
  
- /***********************************************************************************************************************
- * Public function prototypes
+/***********************************************************************************************************************
+ * Public functions prototypes
  **********************************************************************************************************************/
 
- /**
-  * @brief Función principal máquina de fallas
-  *
-  * Primero determina estado general de cada uno de los modulos segun el estado de las
-  * variables decodificadas. Luego, llama a la función máquina de estados de fallas.
-  * No es static, por lo que puede ser usada por otros archivos.
-  *
-  */
+/**
+ * @brief FunciÃ³n principal mÃ¡quina de fallas.
+ *
+ * Determina estado general de cada uno de los modulos segun el estado de las
+ * variables decodificadas. 
+ * 
+ * Llama a la funciÃ³n mÃ¡quina de estados de fallas.
+ * 
+ * No es static, por lo que puede ser usada por otros archivos.
+ *
+ * @param None
+ * @retval None
+ */
 void FAILURES(void);
 
 /**
- * @brief Lee estado de la máquina de estados de fallas
+ * @brief Lee estado de la mÃ¡quina de estados de fallas.
  *
- * Lee estado de la máquina de estados de fallas. No es static, por lo que puede ser
+ * Lee estado de la mÃ¡quina de estados de fallas. No es static, por lo que puede ser
  * usada por otros archivos.
  *
- * @return uint8_t Estado de la máquina de estados
+ * @param None
+ * @return uint8_t Estado de la mÃ¡quina de estados
  */
-uint8_t get_Failures_State(void);
+uint8_t FAILURES_GetState(void);
 
 #endif /* _FAILURES_H_ */

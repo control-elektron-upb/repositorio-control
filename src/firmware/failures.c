@@ -1,7 +1,7 @@
 /**
  * @file failures.c
  * @author Juan
- * @brief Implementaci髇 m醧uina de fallas
+ * @brief Implementaci贸n m谩quinas de fallas
  * @version 0.1
  * @date 2021-12-01
  *
@@ -19,7 +19,7 @@
  * Private variables definitions
  **********************************************************************************************************************/
 
-/** @brief Estado de la m醧uina de estados */
+/** @brief Estado de la m谩quina de estados */
 static uint8_t failures_state = kCAUTION1;
 
 /** @brief Puntero a estructura de tipo st_bms_vars_t que contiene los estados de las variables del BMS */
@@ -57,14 +57,35 @@ static var_state_t inversor_current_status(void);
  * Public functions implementation
  **********************************************************************************************************************/
 
+/**
+ * @brief Funci贸n principal m谩quina de fallas.
+ *
+ * Determina estado general de cada uno de los modulos segun el estado de las
+ * variables decodificadas. 
+ * 
+ * Llama a la funci贸n m谩quina de estados de fallas.
+ * 
+ * No es static, por lo que puede ser usada por otros archivos.
+ *
+ * @param None
+ * @retval None
+ */
 void FAILURES(void)
 {
     Failures_Get_ModulesStatus();
     Failures_StateMachine();
 }
 
-
-uint8_t get_Failures_State(void)
+/**
+ * @brief Lee estado de la m谩quina de estados de fallas.
+ *
+ * Lee estado de la m谩quina de estados de fallas. No es static, por lo que puede ser
+ * usada por otros archivos.
+ *
+ * @param None
+ * @return uint8_t Estado de la m谩quina de estados
+ */
+uint8_t FAILURES_GetState(void)
 {
     return failures_state;
 }
@@ -74,11 +95,11 @@ uint8_t get_Failures_State(void)
  **********************************************************************************************************************/
 
  /**
-  * @brief Funci髇 m醧uina de estado de fallas
+  * @brief Funci贸n m谩quina de estado de fallas
   *
   * Se encarga de realizar transiciones entre diferentes fallas de acuerdo al estado
-  * de las variables del veh韈ulo, con ello establece el tope de modo de manejo. M醩
-  * especificamente, la m醧uina de fallas verifica el estado general de los m骴ulos BMS,
+  * de las variables del veh铆culo, con ello establece el tope de modo de manejo. M谩s
+  * especificamente, la m谩quina de fallas verifica el estado general de los m贸dulos BMS,
   * DCDC e inversor y conforme a ello realiza las transiciones entre las diferentes fallas
   * posibles: OK, CAUTION1, CAUTION2, y AUTOKILL.
   *
@@ -156,7 +177,7 @@ static void Failures_StateMachine(void)
 
         /* Actualiza falla a AUTOKILL en bus_data */
         Failures_Send_Failure(AUTOKILL, &bus_data);
-        /* Luego actualiza variable autokill en bus de salida can y enviar mensaje de maxima prioridad CAN (縞髆o? 縤nterrupciones?) */
+        /* Luego actualiza variable autokill en bus de salida can y enviar mensaje de maxima prioridad CAN (驴c贸mo? 驴interrupciones?) */
         Failures_Send_Autokill_CAN(&bus_can_output);
         break;
 
@@ -166,7 +187,7 @@ static void Failures_StateMachine(void)
 }
 
 /**
- * @brief Funci髇 estado general de los modulos
+ * @brief Funci贸n estado general de los modulos
  *
  * A partir de los estados de las variables codificadas guardados en la estructuras
  * St_Bms, St_Dcdc, St_Inversor, que se encuentran en el bus_data, retorna el estado
@@ -181,16 +202,16 @@ static void Failures_Get_ModulesStatus(void)
 }
 
 /**
- * @brief Funci髇 de estado del m骴ulo BMS
+ * @brief Funci贸n de estado del m贸dulo BMS
  *
  * A partir de los estados de las variables codificadas guardados en la estructura
- * St_Bms del bus_data, retorna el estado general del m骴ulo BMS.
+ * St_Bms del bus_data, retorna el estado general del m贸dulo BMS.
  *
- * @return var_state_t Estado del m骴ulo BMS
+ * @return var_state_t Estado del m贸dulo BMS
  */
 static var_state_t bms_current_status(void)
 {
-    /* condici髇 OK */
+    /* condici贸n OK */
     if (p_St_Bms->voltaje == kVarState_OK && p_St_Bms->corriente == kVarState_OK
         && p_St_Bms->voltaje_min_celda == kVarState_OK && p_St_Bms->potencia == kVarState_OK
         && p_St_Bms->t_max == kVarState_OK && p_St_Bms->nivel_bateria == kVarState_OK)
@@ -198,7 +219,7 @@ static var_state_t bms_current_status(void)
         return kVarState_OK;
     }
 
-    /* condici髇 REGULAR */
+    /* condici贸n REGULAR */
     else if (p_St_Bms->nivel_bateria == kVarState_REGULAR
         || p_St_Bms->t_max == kVarState_REGULAR
         || p_St_Bms->voltaje_min_celda == kVarState_REGULAR
@@ -207,7 +228,7 @@ static var_state_t bms_current_status(void)
         return kVarState_REGULAR;
     }
 
-    /* condici髇 PROBLEM */
+    /* condici贸n PROBLEM */
     else if (p_St_Bms->voltaje == kVarState_PROBLEM || p_St_Bms->corriente == kVarState_PROBLEM
         || p_St_Bms->voltaje_min_celda == kVarState_PROBLEM || p_St_Bms->potencia == kVarState_PROBLEM
         || p_St_Bms->t_max == kVarState_PROBLEM || p_St_Bms->nivel_bateria == kVarState_PROBLEM)
@@ -215,7 +236,7 @@ static var_state_t bms_current_status(void)
         return kVarState_PROBLEM;
     }
 
-    /* condici髇 DATA PROBLEM */
+    /* condici贸n DATA PROBLEM */
     else
     {
         return kVarState_DATA_PROBLEM;
@@ -223,34 +244,34 @@ static var_state_t bms_current_status(void)
 }
 
 /**
- * @brief Funci髇 de estado del m骴ulo DCDC
+ * @brief Funci贸n de estado del m贸dulo DCDC
  *
  * A partir de los estados de las variables codificadas guardados en la estructura
- * St_Dcdc del bus_data, retorna el estado general del m骴ulo DCDC.
+ * St_Dcdc del bus_data, retorna el estado general del m贸dulo DCDC.
  *
- * @return var_state_t Estado del m骴ulo DCDC
+ * @return var_state_t Estado del m贸dulo DCDC
  */
 static var_state_t dcdc_current_status(void)
 {
-    /* condici髇 OK */
+    /* condici贸n OK */
     if (p_St_Dcdc->t_max == kVarState_OK && p_St_Dcdc->voltaje_bateria == kVarState_OK)
     {
         return kVarState_OK;
     }
 
-    /* condici髇 REGULAR */
+    /* condici贸n REGULAR */
     else if (p_St_Dcdc->t_max == kVarState_REGULAR || p_St_Dcdc->voltaje_bateria == kVarState_REGULAR)
     {
         return kVarState_REGULAR;
     }
 
-    /* condici髇 PROBLEM */
+    /* condici贸n PROBLEM */
     else if (p_St_Dcdc->t_max == kVarState_PROBLEM || p_St_Dcdc->voltaje_bateria == kVarState_PROBLEM)
     {
         return kVarState_PROBLEM;
     }
     
-    /* condici髇 DATA PROBLEM */
+    /* condici贸n DATA PROBLEM */
     else
     {
         return kVarState_DATA_PROBLEM;
@@ -258,16 +279,16 @@ static var_state_t dcdc_current_status(void)
 }
 
 /**
- * @brief Funci髇 de estado del m骴ulo inversor
+ * @brief Funci贸n de estado del m贸dulo inversor
  *
  * A partir de los estados de las variables codificadas guardados en la estructura
- * St_Inversor del bus_data, retorna el estado general del m骴ulo inversor.
+ * St_Inversor del bus_data, retorna el estado general del m贸dulo inversor.
  *
- * @return var_state_t Estado del m骴ulo inversor
+ * @return var_state_t Estado del m贸dulo inversor
  */
 static var_state_t inversor_current_status(void)
 {
-    /* condici髇 OK */
+    /* condici贸n OK */
     if (p_St_Inversor->velocidad == kVarState_OK && p_St_Inversor->V == kVarState_OK
         && p_St_Inversor->I == kVarState_OK && p_St_Inversor->temp_max == kVarState_OK
         && p_St_Inversor->temp_motor == kVarState_OK && p_St_Inversor->potencia == kVarState_OK)
@@ -275,7 +296,7 @@ static var_state_t inversor_current_status(void)
         return kVarState_OK;
     }
 
-    /* condici髇 REGULAR */
+    /* condici贸n REGULAR */
     else if (p_St_Inversor->velocidad == kVarState_REGULAR
         || p_St_Inversor->temp_max == kVarState_REGULAR
         || p_St_Inversor->temp_motor == kVarState_REGULAR
@@ -284,7 +305,7 @@ static var_state_t inversor_current_status(void)
         return kVarState_REGULAR;
     }
 
-    /* condici髇 PROBLEM */
+    /* condici贸n PROBLEM */
     else if (p_St_Inversor->velocidad == kVarState_PROBLEM || p_St_Inversor->V == kVarState_PROBLEM
         || p_St_Inversor->I == kVarState_PROBLEM || p_St_Inversor->temp_max == kVarState_PROBLEM
         || p_St_Inversor->temp_motor == kVarState_PROBLEM || p_St_Inversor->potencia == kVarState_PROBLEM)
@@ -292,7 +313,7 @@ static var_state_t inversor_current_status(void)
         return kVarState_PROBLEM;
     }
 
-    /* condici髇 DATA PROBLEM */
+    /* condici贸n DATA PROBLEM */
     else
     {
         return kVarState_DATA_PROBLEM;
@@ -301,16 +322,16 @@ static var_state_t inversor_current_status(void)
 }
 
 /**
- * @brief Condici髇 para evento de AUTOKILL
+ * @brief Condici贸n para evento de AUTOKILL
  *
- * @return true Se cumple condici髇 autokill
- * @return false No se cumple condici髇 autokill
+ * @return true Se cumple condici贸n autokill
+ * @return false No se cumple condici贸n autokill
  */
 static bool Failures_Autokill_Event(void)
 {
     bool is_autokill = false;
 
-    /* Todos los m骴ulos en PROBLEM */
+    /* Todos los m贸dulos en PROBLEM */
     is_autokill = (p_St_Bms->bms_status == kVarState_PROBLEM
         && p_St_Dcdc->dcdc_status == kVarState_PROBLEM
         && p_St_Inversor->inversor_status == kVarState_PROBLEM);
@@ -319,7 +340,7 @@ static bool Failures_Autokill_Event(void)
 }
 
 /**
- * @brief Env韔 de falla a bus de datos
+ * @brief Env铆o de falla a bus de datos
  *
  * @param to_send               Falla a enviar
  * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus1_t (bus de datos)
@@ -330,7 +351,7 @@ static void Failures_Send_Failure(failure_t to_send, typedef_bus1_t* p_bus_data)
 }
 
 /**
- * @brief Env韔 de falla a bus de salida CAN
+ * @brief Env铆o de falla a bus de salida CAN
  *
  * @param to_send               Falla a enviar
  * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
@@ -341,7 +362,7 @@ static void Failures_Send_Failure_CAN(failure_t to_send, typedef_bus2_t* p_bus_c
 }
 
 /**
- * @brief Env韔 de evento autokill a bus de salida CAN
+ * @brief Env铆o de evento autokill a bus de salida CAN
  *
  * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
  */
