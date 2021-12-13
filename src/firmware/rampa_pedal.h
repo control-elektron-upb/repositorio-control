@@ -25,18 +25,22 @@
  **********************************************************************************************************************/
 
 /**
- * @brief FunciÛn principal de bloque rampa pedal
+ * @brief Funci√≥n principal de bloque rampa pedal.
  *
- * Rampa pedal se encarga de transformar el valor de pedal registrado de perifÈricos
- * a un valor de velocidad que ser· empleado por inversor. Para cada modo de manejo
- * se tiene una funciÛn de transferencia diferente para determinar el valor de
- * velocidad asociado al valor de pedal registrado desde perifÈricos.
+ * Se encarga de transformar el valor de pedal registrado de perif√©ricos a un valor de 
+ * velocidad que ser√° empleado por inversor. Para cada modo de manejo se tiene una 
+ * funci√≥n de transferencia diferente para determinar el valor de velocidad asociado al 
+ * valor de pedal registrado desde perif√©ricos.
  *
- * Lee la variable pedal de la estructura de variables decodificadas de perifÈricos,
+ * Lee la variable pedal de la estructura de variables decodificadas de perif√©ricos,
  * es decir, la estructura de tipo rx_peripherals_t que se encuentra en el bus_data.
  *
  * Escribe en la variable velocidad del bus_data.
+ * 
+ * No es static, por lo que puede ser usada por otros archivos.
  *
+ * @param None
+ * @retval None
  */
 void RAMPA_PEDAL(void);
 
