@@ -1,7 +1,7 @@
 /**
  * @file decode_data.c
  * @author Juan
- * @brief Implementaci髇 decodificaci髇 de datos provenientes de bus CAN
+ * @brief Implementaci贸n decodificaci贸n de datos provenientes de bus CAN
  * @version 0.1
  * @date 2021-11-30
  *
@@ -44,7 +44,7 @@
  * Private variables definitions
  **********************************************************************************************************************/
 
-/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de perif閞icos */
+/** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de perif茅ricos */
 static rx_peripherals_vars_t* p_Rx_Peripherals = &bus_data.Rx_Peripherals;
 
 /** @brief Puntero a estructura de tipo rx_bms_vars_t que contiene los valores de las variables decodificadas del BMS */
@@ -93,14 +93,16 @@ static void decode_dead_man_info(void);
  **********************************************************************************************************************/
 
 /**
- * @brief Funci髇 principal de decodificaci髇 de datos de bus CAN
+ * @brief Funci贸n principal de decodificaci贸n de datos de bus CAN.
  *
- * Decodifica los datos que se reciben desde el bus CAN de: perif閞icos, BMS,
- * DCDC, inversor. Los datos decodificados quedan guardados en estructuras
+ * Decodifica los datos que se reciben desde el bus CAN de: perif茅ricos, BMS,
+ * DCDC, e inversor. Los datos decodificados quedan guardados en estructuras
  * de tipo rx_peripherals_vars_t, rx_bms_vars_t, rx_dcdc_vars_t, y rx_inversor_vars_t,
  * en el bus_data. Estas estructuras son Rx_Peripherals, Rx_Bms, Rx_Dcdc y Rx_Inversor.
  * No es static, por lo que puede ser usada por otros archivos.
  *
+ * @param None
+ * @retval None
  */
 void DECODE_DATA(void)
 {
@@ -119,9 +121,9 @@ void DECODE_DATA(void)
  **********************************************************************************************************************/
 
 /**
- * @brief Decodifica los datos de perif閞icos
+ * @brief Decodifica los datos de perif茅ricos
  *
- * Decodifica las variables que se reciben de perif閞icos por CAN y guarda
+ * Decodifica las variables que se reciben de perif茅ricos por CAN y guarda
  * los datos en la estructura Rx_Peripherals del tipo rx_peripherals_vars_t
  * y que se encuentra en el bus_data.
  *
@@ -181,7 +183,7 @@ static void decode_inversor(void)
 }
 
 /**
- * @brief Decodifica las variables anal骻icas de perif閞icos
+ * @brief Decodifica las variables anal贸gicas de perif茅ricos
  *
  */
 static void decode_peripherals_analog(void)
@@ -190,12 +192,12 @@ static void decode_peripherals_analog(void)
 }
 
 /**
- * @brief Decodifica las variables anal骻icas del BMS
+ * @brief Decodifica las variables anal贸gicas del BMS
  *
  */
 static void decode_bms_analog(void)
 {
-    p_Rx_Bms->voltaje = (rx_var_t)bus_can_input.voltaje_bms;    /* o mejor llamar a una funcion mapAnalog? */
+    p_Rx_Bms->voltaje = (rx_var_t)bus_can_input.voltaje_bms;    
     p_Rx_Bms->corriente = (rx_var_t)bus_can_input.corriente_bms;
     p_Rx_Bms->voltaje_min_celda = (rx_var_t)bus_can_input.voltaje_min_celda_bms;
     p_Rx_Bms->potencia = (rx_var_t)bus_can_input.potencia_bms;
@@ -204,7 +206,7 @@ static void decode_bms_analog(void)
 }
 
 /**
- * @brief Decodifica las variables anal骻icas del DCDC
+ * @brief Decodifica las variables anal贸gicas del DCDC
  *
  */
 static void decode_dcdc_analog(void)
@@ -216,7 +218,7 @@ static void decode_dcdc_analog(void)
 }
 
 /**
- * @brief Decodifica las variables anal骻icas del inversor
+ * @brief Decodifica las variables anal贸gicas del inversor
  *
  */
 static void decode_inversor_analog(void)
@@ -298,7 +300,7 @@ static void decode_inversor_info(void)
 }
 
 /**
- * @brief Decodifica botones de perif閞icos
+ * @brief Decodifica botones de perif茅ricos
  *
  */
 static void decode_buttons(void)
@@ -321,7 +323,7 @@ static void decode_buttons(void)
 }
 
 /**
- * @brief Decodifica info de hombre muerto de perif閞icos
+ * @brief Decodifica info de hombre muerto de perif茅ricos
  *
  */
 static void decode_dead_man_info(void)
@@ -338,7 +340,7 @@ static void decode_dead_man_info(void)
 }
 
 /**
- * @brief Funci髇 para realizar mapeo de un rango a otro rango para un numero
+ * @brief Funci贸n para realizar mapeo de un rango a otro rango para un n煤mero
  *
  * @param input Valor de entrada
  * @param input_start Valor inferior de rango de entrada
@@ -356,4 +358,3 @@ static float mapRange(float input, float input_start, float input_end, float out
 
     return output;
 }
-

@@ -1,7 +1,7 @@
 /**
  * @file decode_data.h
  * @author Juan
- * @brief Declaraciones decodificaci髇 de datos provenientes de bus CAN
+ * @brief Declaraciones decodificaci贸n de datos provenientes de bus CAN
  * @version 0.1
  * @date 2021-11-30
  *
@@ -23,7 +23,7 @@
  **********************************************************************************************************************/
 
 /**
- * @brief Tipo de dato decode_status_t para bandera de decodificaci髇
+ * @brief Tipo de dato decode_status_t para bandera de decodificaci贸n
  *
  */
 typedef enum
@@ -37,14 +37,16 @@ typedef enum
  **********************************************************************************************************************/
 
 /**
- * @brief Funci髇 principal de decodificaci髇 de datos de bus CAN
+ * @brief Funci贸n principal de decodificaci贸n de datos de bus CAN.
  *
- * Decodifica los datos que se reciben desde el bus CAN de: perif閞icos, BMS, DCDC, 
- * inversor. Los datos decodificados quedan guardados en estructuras de tipo 
- * rx_peripherals_vars_t, rx_bms_vars_t, rx_dcdc_vars_t, y rx_inversor_vars_t, en el 
- * bus_data. Estas estructuras son Rx_Peripherals, Rx_Bms, Rx_Dcdc y Rx_Inversor.
+ * Decodifica los datos que se reciben desde el bus CAN de: perif茅ricos, BMS,
+ * DCDC, e inversor. Los datos decodificados quedan guardados en estructuras
+ * de tipo rx_peripherals_vars_t, rx_bms_vars_t, rx_dcdc_vars_t, y rx_inversor_vars_t,
+ * en el bus_data. Estas estructuras son Rx_Peripherals, Rx_Bms, Rx_Dcdc y Rx_Inversor.
  * No es static, por lo que puede ser usada por otros archivos.
  *
+ * @param None
+ * @retval None
  */
 void DECODE_DATA(void);
 
@@ -53,7 +55,7 @@ void DECODE_DATA(void);
  **********************************************************************************************************************/
 
 /**
- * @brief Bandera para ejecutar bloque de decodificaci髇
+ * @brief Bandera para ejecutar bloque de decodificaci贸n de datos
  * 
  */
 extern decode_status_t flag_decodificar; /* puede ser manipulada por otros archivos */
