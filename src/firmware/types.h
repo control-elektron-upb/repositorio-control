@@ -43,8 +43,8 @@ typedef enum
 typedef float rx_var_t;
 
 /**
- * @brief Tipo de dato module_info_t para variable info de cada m骴ulo:
- * perif閞icos, BMS, DCDC, inversor.
+ * @brief Tipo de dato module_info_t para variable info de cada m贸dulo:
+ * perif茅ricos, BMS, DCDC, inversor.
  *
  */
 typedef enum
@@ -54,19 +54,19 @@ typedef enum
 } module_info_t;
 
 /**
- * @brief Tipo de dato buttons_state_t para variable botones de perif閞icos
+ * @brief Tipo de dato buttons_state_t para variable botones de perif茅ricos
  *
  */
 typedef enum
 {
-    kButton_ECO,    /**< Bot髇 de modo ECO */
-    kButton_NORMAL, /**< Bot髇 de modo NORMAL */
-    kButton_SPORT,  /**< Bot髇 de modo SPORT */
-    kButton_NONE    /**< Ning鷑 bot髇 de modo */
+    kButton_ECO,    /**< Bot贸n de modo ECO */
+    kButton_NORMAL, /**< Bot贸n de modo NORMAL */
+    kButton_SPORT,  /**< Bot贸n de modo SPORT */
+    kButton_NONE    /**< Ning煤n Bot贸n de modo */
 } buttons_state_t;
 
 /**
- * @brief Tipo de dato dead_man_state_t para variable dead_man de perif閞icos
+ * @brief Tipo de dato dead_man_state_t para variable dead_man de perif茅ricos
  *
  */
 typedef enum
@@ -76,7 +76,7 @@ typedef enum
 } dead_man_state_t;
 
 /**
- * @brief Tipo de dato estructura rx_peripherals_vars_t para variables decodificadas de perif閞icos
+ * @brief Tipo de dato estructura rx_peripherals_vars_t para variables decodificadas de perif茅ricos
  *
  */
 typedef struct
@@ -160,7 +160,7 @@ typedef struct
     var_state_t t_max;
     var_state_t nivel_bateria;
 
-    var_state_t bms_status;         /**< Estado general del m骴ulo BMS */
+    var_state_t bms_status;         /**< Estado general del m贸dulo BMS */
 
 } st_bms_vars_t;
 
@@ -175,7 +175,7 @@ typedef struct
     var_state_t t_max;
     var_state_t potencia;
 
-    var_state_t dcdc_status;        /**< Estado general del m骴ulo DCDC */
+    var_state_t dcdc_status;        /**< Estado general del m贸dulo DCDC */
 
 } st_dcdc_vars_t;
 
@@ -192,7 +192,7 @@ typedef struct
     var_state_t temp_motor;
     var_state_t potencia;
 
-    var_state_t inversor_status;    /**< Estado general del m骴ulo inversor */
+    var_state_t inversor_status;    /**< Estado general del m贸dulo inversor */
 
 } st_inversor_vars_t;
 
