@@ -1,7 +1,7 @@
 /**
  * @file can_config.c
  * @author Subgrupo Control
- * @brief Código de inicialización y configuración del CAN
+ * @brief Implementaciones para inicialización y configuración hardware de CAN
  * @version 0.1
  * @date 2021-12-10
  * 
@@ -16,20 +16,26 @@
 #include "can_config.h"
 
 /***********************************************************************************************************************
- * Private variables definitions
+ * Variables definitions
  **********************************************************************************************************************/
 
-CAN_HandleTypeDef hcan1;             		//CAN handle structure instance
+/** @brief CAN handle structure instance */
+CAN_HandleTypeDef hcan1;
 
-static CAN_FilterTypeDef aFilterConfig;     //CAN filter configuration structure instance
+/** @brief CAN filter configuration structure instance */
+static CAN_FilterTypeDef aFilterConfig;
 
 /***********************************************************************************************************************
  * Private functions prototypes
  **********************************************************************************************************************/
 
-static void CAN1_HandleInit(void);
+static void CAN1_Init(void);
 
 static void CAN1_FilterConfig(void);
+
+static void CAN1_ActivateNotification(void);
+
+static void CAN1_Start(void);
 
 static void ErrorHandler(void);
 
@@ -37,10 +43,18 @@ static void ErrorHandler(void);
  * Public functions implementation
  **********************************************************************************************************************/
 
-void CAN_Driver_Init(void) 
+/**
+ * @brief Función de inicialización de driver CAN.
+ * 
+ * @param None
+ * @retval None
+ */
+void CAN_DRIVER_Init(void) 
 {
-    CAN1_HandleInit();
-    CAN1_FilterConfig();    
+    CAN1_Init();					// CAN1 peripheral initialization
+    CAN1_FilterConfig();    		// CAN1 filter configuration
+	CAN1_ActivateNotification();	// CAN1 enable interrupt
+	CAN1_Start();					// CAN1 start the CAN module
 }
 
 /***********************************************************************************************************************
@@ -48,12 +62,12 @@ void CAN_Driver_Init(void)
  **********************************************************************************************************************/
 
 /**
- * @brief CAN1 Handle Structure Instance Initialization Function.
+ * @brief CAN1 Initialization Function.
  * 
  * @param None
  * @retval None
  */
-static void CAN1_HandleInit(void)
+static void CAN1_Init(void)
 {
     hcan1.Instance = CAN1;                      
     hcan1.Init.Prescaler = 10;
@@ -70,7 +84,7 @@ static void CAN1_HandleInit(void)
     
     if (HAL_CAN_Init(&hcan1) != HAL_OK)
     {
-        Driver_CAN_ErrorHandler();
+        ErrorHandler();
     }
 }
 
@@ -82,18 +96,18 @@ static void CAN1_HandleInit(void)
  */
 static void CAN1_FilterConfig(void)
 {
-	//uint32_t filter_list [13];
 
 	aFilterConfig.FilterActivation = CAN_FILTER_ENABLE;
 	aFilterConfig.FilterBank = 0;
 	aFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;
 	aFilterConfig.FilterMode = CAN_FILTERMODE_IDLIST;
 	aFilterConfig.FilterScale = CAN_FILTERSCALE_16BIT;
-	aFilterConfig.FilterIdHigh = ID_ESTADO_MANEJO<<5;					 	//id1, se toman primeros 16 bits
-	aFilterConfig.FilterIdLow = ID_ESTADO_FALLA<<5;							//Id2
+	aFilterConfig.FilterIdHigh = ID_ESTADO_MANEJO<<5;
+	aFilterConfig.FilterIdLow = ID_ESTADO_FALLA<<5;	
 	aFilterConfig.FilterMaskIdHigh = ID_CONTROL_OK<<5;
 	aFilterConfig.FilterMaskIdLow = ID_VOLTAJE_BMS<<5;
 	aFilterConfig.SlaveStartFilterBank = 14;
+
 	HAL_CAN_ConfigFilter(&hcan1, &aFilterConfig);
 
 	aFilterConfig.FilterActivation = CAN_FILTER_ENABLE;
@@ -101,17 +115,36 @@ static void CAN1_FilterConfig(void)
 	aFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;
 	aFilterConfig.FilterMode = CAN_FILTERMODE_IDLIST;
 	aFilterConfig.FilterScale = CAN_FILTERSCALE_16BIT;
-	aFilterConfig.FilterIdHigh = ID_CORRIENTE_BMS<<5;					 	//id1, se toman primeros 16 bits
-	aFilterConfig.FilterIdLow = ID_POTENCIA_BMS<<5;							//Id2
+	aFilterConfig.FilterIdHigh = ID_CORRIENTE_BMS<<5;
+	aFilterConfig.FilterIdLow = ID_POTENCIA_BMS<<5;	
 	aFilterConfig.FilterMaskIdHigh = ID_NIVEL_BATERIA<<5;
 	aFilterConfig.FilterMaskIdLow = ID_VELOCIDAD<<5;
 	aFilterConfig.SlaveStartFilterBank = 14;
 
 	HAL_CAN_ConfigFilter(&hcan1, &aFilterConfig);
-	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING); // activa interrupción
-	HAL_CAN_Start(&hcan1);
+	
+}
 
-	//HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING);
+/**
+ * @brief CAN1 Enable Interrupt
+ * 
+ * @param None
+ * @retval None
+ */
+static void CAN1_ActivateNotification(void)
+{
+	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
+}
+
+/**
+ * @brief CAN1 Start the CAN Module
+ * 
+ * @param None
+ * @retval None
+ */
+static void CAN1_Start(void)
+{
+	HAL_CAN_Start(&hcan1);
 }
 
 /**

@@ -1,7 +1,7 @@
 /**
  * @file can_config.h
  * @author Subgrupo Control
- * @brief Declaraciones para código de inicialización y configuración del CAN
+ * @brief Declaraciones para inicialización y configuración hardware de CAN
  * @version 0.1
  * @date 2021-12-10
  * 
@@ -29,7 +29,7 @@
  * @param None
  * @retval None
  */
-void CAN_Driver_Init(void);         // CAN Driver Initialization Function
+void CAN_DRIVER_Init(void);         // CAN Driver Initialization Function
 
 /***********************************************************************************************************************
  * Global variables declarations
@@ -39,6 +39,6 @@ void CAN_Driver_Init(void);         // CAN Driver Initialization Function
  * @brief CAN handle structure instance
  * 
  */
-extern CAN_HandleTypeDef hcan1;     // Debe ser global porque el código de CAN utiliza esta estructura handle
+extern CAN_HandleTypeDef hcan1;     // debe ser global porque el código de CAN de firmware la utiliza
 
 #endif /* _CAN_CONFIG_H_ */
