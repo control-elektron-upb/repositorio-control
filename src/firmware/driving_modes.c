@@ -16,6 +16,13 @@
 #include "driving_modes.h"
 
 /***********************************************************************************************************************
+ * Macros
+ **********************************************************************************************************************/
+
+/** @brief Duración del echo en ms */
+#define ECHO_LENGTH         1000
+
+/***********************************************************************************************************************
  * Private variables definitions
  **********************************************************************************************************************/
 
@@ -42,11 +49,13 @@ static void DrivingModes_StateMachine(void);
 
 static control_status_t DrivingModes_WaitResponse_Echo(void);
 
-static void DrivingModes_Send_Echo(typedef_bus2_t* p_bus_can_output);
+static void DrivingModes_Send_Echo(typedef_bus2_t* bus_can_output);
 
-static void DrivingModes_Send_DrivingMode(driving_mode_t to_send, typedef_bus1_t* p_bus_data);
+static void DrivingModes_Send_ControlInfo(module_info_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output);
 
-static void DrivingModes_Send_ControlInfo(control_status_t to_send, typedef_bus1_t* p_bus_data);
+static void DrivingModes_Send_DrivingMode(driving_mode_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output);
+
+static void DrivingModes_StartTimer(void);
 
 /***********************************************************************************************************************
  * Public functions implementation
@@ -75,7 +84,7 @@ void DRIVING_MODES(void)
  * @param None
  * @return uint8_t Estado de la máquina de estados
  */
-uint8_t DRIVING_MODES_GetState(void)
+uint8_t DRIVING_MODES_Get_State(void)
 {
     return driving_modes_state;
 }
@@ -85,7 +94,7 @@ uint8_t DRIVING_MODES_GetState(void)
  **********************************************************************************************************************/
 
 /**
- * @brief Máquina de estados de modo de manejo
+ * @brief Máquina de estados de modo de manejo.
  *
  * Se encarga de permitir las transiciones entre los diferentes modos de manejo
  * de acuerdo a los botones de periféricos y a la máquina de fallas. Por defecto
@@ -93,7 +102,7 @@ uint8_t DRIVING_MODES_GetState(void)
  * de los demás módulos.
  *
  * Lee la variable buttons_change_state de la estructura de variables decodificadas
- * de periféricos, es decir, la estructura de tipo rx_peripherals_t que se encuentra
+ * de periféricos, es decir, la estructura de tipo rx_peripherals_vars_t que se encuentra
  * en el bus_data.
  *
  * Escribe en la variable driving_mode del bus_data.
@@ -104,14 +113,20 @@ static void DrivingModes_StateMachine(void)
     switch (driving_modes_state)
     {
     case kINIT:
-        /* Espera confirmación de los demás módulos */
-        if (DrivingModes_WaitResponse_Echo() == IM_READY)
-            driving_modes_state = kNORMAL;
+
+        HAL_Delay(1000);    // espera 1s
+
+        if (DrivingModes_WaitResponse_Echo() == IM_READY)                           // espera confirmación de los demás módulos
+        {
+            DrivingModes_Send_ControlInfo(kInfo_OK, &bus_data, &bus_can_output);    // envía info de control a bus de datos y a bus de salida can
+            driving_modes_state = kNORMAL;                                          // pasa a estado kNORMAL
+        }
         break;
 
     case kECO:
-        /* Actualiza modo de manejo a ECO en bus_data */
-        DrivingModes_Send_DrivingMode(ECO, &bus_data);
+
+        /* Actualiza modo de manejo a ECO en bus de datos y bus de salida can */
+        DrivingModes_Send_DrivingMode(ECO, &bus_data, &bus_can_output);
 
         if (p_Rx_Peripherals->buttons_change_state == NORMAL && (bus_data.failure == OK || bus_data.failure == CAUTION1))
         {
@@ -124,8 +139,8 @@ static void DrivingModes_StateMachine(void)
         break;
 
     case kNORMAL:
-        /* Actualiza modo de manejo a NORMAL en bus_data */
-        DrivingModes_Send_DrivingMode(NORMAL, &bus_data);
+        /* Actualiza modo de manejo a NORMAL en bus de datos y bus de salida can */
+        DrivingModes_Send_DrivingMode(NORMAL, &bus_data, &bus_can_output);
 
         if (p_Rx_Peripherals->buttons_change_state == ECO || bus_data.failure == CAUTION2)
         {
@@ -138,8 +153,8 @@ static void DrivingModes_StateMachine(void)
         break;
 
     case kSPORT:
-        /* Actualiza modo de manejo a SPORT en bus_data */
-        DrivingModes_Send_DrivingMode(SPORT, &bus_data);
+        /* Actualiza modo de manejo a SPORT en bus de datos y bus de salida can */
+        DrivingModes_Send_DrivingMode(SPORT, &bus_data, &bus_can_output);
 
         if (p_Rx_Peripherals->buttons_change_state == ECO || bus_data.failure == CAUTION2)
         {
@@ -157,85 +172,129 @@ static void DrivingModes_StateMachine(void)
 }
 
 /**
- * @brief Envío de modo de manejo al bus de datos
- *
- * @param to_send       Modo de manejo a enviar
- * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
- */
-static void DrivingModes_Send_DrivingMode(driving_mode_t to_send, typedef_bus1_t* p_bus_data)
-{
-    p_bus_data->driving_mode = to_send;
-}
-
-/**
- * @brief Realiza echo, espera confirmación respuesta de los demás módulos
+ * @brief Realiza echo y espera confirmación de los demás módulos.
  *
  * @return control_status_t Status de control
  */
 static control_status_t DrivingModes_WaitResponse_Echo(void)
 {
-    static bool time_out = false;
+    bool time_out = false;
 
-    control_status_t status = NOT_READY;
+    control_status_t status = NOT_READY;            // control no está listo
 
-    /* Echo a los demás módulos */
-    DrivingModes_Send_Echo(&bus_can_output);
+    DrivingModes_Send_Echo_CAN(&bus_can_output);    // envía echo a bus CAN 
 
-    printf("Esperando respuesta...\n");
+    DrivingModes_StartTimer();                      // comienza timer
+
     while (status != IM_READY)
     {
-        /* Recibe info de CAN */
-        /* Decodifica */
-        /* Lee bus_data */
 
-        /* Si todos los módulos OK y time_out TRUE ... */
-        if (p_Rx_Peripherals->peripherals_ok == kInfo_OK && p_Rx_Bms->bms_ok == kInfo_OK
-            && p_Rx_Dcdc->dcdc_ok == kInfo_OK && p_Rx_Inversor->inversor_ok == kInfo_OK)
+        //DrivingModes_DebugLEDs();
+
+        /* todos los módulos OK? */
+        if (bus_can_input.peripherals_ok == CAN_OK && bus_can_input.bms_ok == CAN_OK 
+            && bus_can_input.dcdc_ok == CAN_OK && bus_can_input.inversor_ok == CAN_OK)
         {
-            printf("Todos los módulos OK\n");
-            printf("...\n");
-            //DrivingModes_Start_Timeout();
-            if (time_out) {
-                printf("Timeout COMPLETE\n");
-                time_out = false;
-                status = IM_READY;
-            }
+            status = IM_READY;      // control está listo
         }
-        /* Envío info de control a bus_data */
-        DrivingModes_Send_ControlInfo(status, &bus_data);
+        /* bandera de timer activada? */
+        else if (flag_timer) 
+        {            
+            time_out = true;        // hay timeout
+
+            DrivingModes_Send_Echo(&bus_can_output);    // envía echo a bus CAN, de nuevo
+
+            DrivingModes_StartTimer();                  // comienza timer, de nuevo
+
+            time_out = false;
+
+            flag_timer = 0;         // reinicia bandera de timer
+        }        
     }
-    printf("Control OK\n");
+
     return status;
 }
 
 /**
- * @brief Realiza echo a los demás módulos
+ * @brief Realiza echo a los demás módulos.
  *
  * Se envía por la dirección CAN 0x014 (control_ok) el valor 0x01 un segundo después
- * de encenderse, despues el 0x00. Esto lo recibirá cada módulo y responderán.
+ * de encenderse la tarjeta, despues el 0x00. Esto lo recibirá cada módulo y responderán.
  *
- * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
  */
-static void DrivingModes_Send_Echo(typedef_bus2_t* p_bus_can_output)
+static void DrivingModes_Send_Echo(typedef_bus2_t* bus_can_output)
 {
-    printf("Control envia Echo\n");
+    bus_can_output->control_ok = CAN_ECHO;      // carga valor 0x01 a control_ok del bus 2 (bus_can_output)
+    
+    CAN_DRIVER_Send(bus_can_output);            // llamada a función de envío de datos a driver CAN
+    
+    HAL_Delay(ECHO_LENGTH);                     // espera ECHO_LENGTH ms
+
+    bus_can_output->control_ok = CAN_IDLE;      // carga valor 0x00 a control_ok del bus 2 (bus_can_output)
+
+    CAN_DRIVER_Send(bus_can_output);            // llamada a función de envío de datos a driver CAN
 }
 
 /**
- * @brief Envío de status de control al bus de datos 
- *
- * @param to_send       Status de control a enviar
- * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @brief Función para comenzar temporización hasta timeout.
+ * 
+ * Llama a función TIMER_Start() que se encarga de inciar timer en cero y comienza a contar hasta timeout. Cuando 
+ * llega a timeout se genera una interrupción en la cual se activa la bandera flag_timer. Con dicha bandera será 
+ * posible determinar que se cumplió el tiempo designado, es decir, se generó el timeout.
+ * 
  */
-static void DrivingModes_Send_ControlInfo(control_status_t to_send, typedef_bus1_t* p_bus_data)
+static void DrivingModes_StartTimer(void)
 {
+    TIMER_Start();
+}
+
+/**
+ * @brief Envío de status de control a bus de datos y a bus de salida can.
+ *
+ * @param to_send           Status de control a enviar
+ * @param bus_data          Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida can)
+ */
+static void DrivingModes_Send_ControlInfo(module_info_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output)
+{
+    bus_data->control_ok = to_send;
+
     switch (to_send)
     {
-    case IM_READY:
-        p_bus_data->control_ok = kInfo_OK;
+    case kInfo_OK:
+        bus_can_output->control_ok = CAN_OK;
         break;
-    case NOT_READY:
-        p_bus_data->control_ok = kInfo_ERROR;
+    case kInfo_ERROR:
+        bus_can_output->control_ok = CAN_ERROR;
+        break;
+    default:
+        break;
+    }
+}
+
+/**
+ * @brief Envío de modo de manejo a bus de datos y a bus de salida can.
+ *
+ * @param to_send           Modo de manejo a enviar
+ * @param bus_data          Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida can)
+ */
+static void DrivingModes_Send_DrivingMode(driving_mode_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output)
+{
+    bus_data->driving_mode = to_send;
+
+    switch (to_send)
+    {
+    case OK:
+        bus_can_output->estado_manejo = CAN_OK;
+        break;
+    case NORMAL:
+        bus_can_output->estado_manejo = CAN_NORMAL;
+        break;
+    case SPORT:
+        bus_can_output->estado_manejo = CAN_SPORT;
+        break;
     default:
         break;
     }
