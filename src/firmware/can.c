@@ -28,28 +28,31 @@
  * Variables definitions
  **********************************************************************************************************************/
 
-static CAN_TxHeaderTypeDef txHeader;                // CAN Tx message header structure instance
+/** @brief CAN Tx message header structure instance */
+static CAN_TxHeaderTypeDef txHeader;
 
-static CAN_RxHeaderTypeDef rxHeader;                // CAN Rx message header structure definition
+/** @brief CAN Rx message header structure definition */
+static CAN_RxHeaderTypeDef rxHeader;
 
-decode_status_t flag_decodificar = NO_DECODIFICA;   // Bandera para ejecutar bloque de decodificación de datos
+/** @brief Bandera para ejecutar bloque de decodificación de datos */
+decode_status_t flag_decodificar = NO_DECODIFICA; 
 
 /***********************************************************************************************************************
  * Public functions implementation
  **********************************************************************************************************************/
 
 /**
- * @brief Función de envío de datos a driver CAN.
+ * @brief Función de envío de datos CAN.
  * 
- * Realiza el envío de los datos que se encuentran en el bus de salida CAN (bus 3) al driver CAN que interactúa con el
- * tranceiver de CAN de la tarjeta.
+ * Realiza el envío de los datos que se encuentran en el bus de salida CAN (bus 2) a driver CAN que interactúa con el
+ * tranceiver CAN de la tarjeta.
  * 
- * @param bus_can_output Puntero a estructura bus de salida CAN
+ * @param bus_can_output Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
  * @retval None
  */
-void CAN_Driver_Send(typedef_bus2_t *bus_can_output)
+void CAN_Send(typedef_bus2_t *bus_can_output)
 {
-	uint8_t msg = 0U;
+	uint8_t msg = 0;
 	uint32_t id = 0U;
     uint32_t mailbox;
 
@@ -165,7 +168,7 @@ void CAN_Driver_Send(typedef_bus2_t *bus_can_output)
  * @brief Función handler de interrupción de recepción de datos de driver CAN.
  * 
  * Realiza la recepción de los datos que llegan desde el driver CAN y los guarda en la estructura de bus de entrada
- * de datos CAN (bus 2). Cuando se active la interrupción, activa la bandera de decodificación para indicar que
+ * de datos CAN (bus 3). Cuando se active la interrupción, activa la bandera de decodificación para indicar que
  * se puede ejecutar el bloque de decodificación de los datos que vienen de CAN.
  * 
  * @param None
