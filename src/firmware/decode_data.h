@@ -19,6 +19,31 @@
 #include "buses.h"
 
 /***********************************************************************************************************************
+ * Macros
+ **********************************************************************************************************************/
+
+/** @brief Valor CAN para las variables peripherals_ok, bms_ok, dcdc_ok, inversor_ok  */
+#define CAN_OK          0x01
+
+/** @brief Valor CAN para las variables peripherals_ok, bms_ok, dcdc_ok, inversor_ok  */
+#define CAN_ERROR       0x02
+
+/** @brief Valor CAN para buttons_change_state */
+#define CAN_BTN1        0x01
+
+/** @brief Valor CAN para buttons_change_state */
+#define CAN_BTN2        0x02
+
+/** @brief Valor CAN para buttons_change_state */
+#define CAN_BTN3        0x03
+
+/** @brief Valor CAN para dead_man */
+#define CAN_PRESS       0x01
+
+/** @brief Valor CAN para dead_man */
+#define CAN_NOPRESS     0x02
+
+/***********************************************************************************************************************
  * Types declarations
  **********************************************************************************************************************/
 
@@ -58,6 +83,6 @@ void DECODE_DATA(void);
  * @brief Bandera para ejecutar bloque de decodificación de datos
  * 
  */
-extern decode_status_t flag_decodificar; /* puede ser manipulada por otros archivos */
+extern decode_status_t flag_decodificar;    // puede ser manipulada por otros archivos
 
 #endif /* _DECODE_DATA_H_ */

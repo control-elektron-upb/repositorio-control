@@ -16,31 +16,6 @@
 #include "decode_data.h"
 
 /***********************************************************************************************************************
- * Macros
- **********************************************************************************************************************/
-
-/** @brief Valor CAN para las variables peripherals_ok, bms_ok, dcdc_ok, inversor_ok  */
-#define CAN_OK          0x01
-
-/** @brief Valor CAN para las variables peripherals_ok, bms_ok, dcdc_ok, inversor_ok  */
-#define CAN_ERROR       0x02
-
-/** @brief Valor CAN para buttons_change_state */
-#define CAN_BTN1        0x01
-
-/** @brief Valor CAN para buttons_change_state */
-#define CAN_BTN2        0x02
-
-/** @brief Valor CAN para buttons_change_state */
-#define CAN_BTN3        0x03
-
-/** @brief Valor CAN para dead_man */
-#define CAN_PRESS       0x01
-
-/** @brief Valor CAN para dead_man */
-#define CAN_NOPRESS     0x02
-
-/***********************************************************************************************************************
  * Private variables definitions
  **********************************************************************************************************************/
 
@@ -188,7 +163,7 @@ static void decode_inversor(void)
  */
 static void decode_peripherals_analog(void)
 {
-    p_Rx_Peripherals->pedal = (rx_var_t)bus_can_input.pedal / 60.0;
+    p_Rx_Peripherals->pedal = (rx_var_t)bus_can_input.pedal;
 }
 
 /**
