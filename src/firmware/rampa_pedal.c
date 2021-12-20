@@ -20,7 +20,7 @@
  **********************************************************************************************************************/
 
 /** @brief Velocidad calculada de la rampa pedal */
-static uint8_t velocidad_inversor;
+static uint8_t velocidad_inversor = 0;
 
 /** @brief Puntero a estructura de tipo rx_peripherals_vars_t que contiene los valores de las variables decodificadas de periféricos */
 static rx_peripherals_vars_t* p_Rx_Peripherals = &bus_data.Rx_Peripherals;
@@ -29,7 +29,7 @@ static rx_peripherals_vars_t* p_Rx_Peripherals = &bus_data.Rx_Peripherals;
  * Private functions prototypes
  **********************************************************************************************************************/
 
-static void RampaPedal_Send_Velocidad(uint8_t to_send, typedef_bus1_t* p_bus_data);
+static void RampaPedal_Send_Velocidad(uint8_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output);
 
 static uint8_t rampa_eco(rx_var_t pedal);
 
@@ -52,14 +52,16 @@ static uint8_t rampa_deadman(rx_var_t pedal);
  * valor de pedal registrado desde periféricos.
  *
  * Lee la variable pedal de la estructura de variables decodificadas de periféricos,
- * es decir, la estructura de tipo rx_peripherals_t que se encuentra en el bus_data.
+ * es decir, la estructura de tipo rx_peripherals_vars_t que se encuentra en el bus_data.
  *
  * Escribe en la variable velocidad del bus_data.
  * 
+ * Escribe en la variable nivel_velocidad del bus_can_output.
+ * 
  * No es static, por lo que puede ser usada por otros archivos.
  *
- * @param None
- * @retval None
+ * @param   None
+ * @retval  None
  */
 void RAMPA_PEDAL(void)
 {
@@ -86,7 +88,7 @@ void RAMPA_PEDAL(void)
     }
 
     /* Actualiza velocidad inversor en bus_data */
-    RampaPedal_Send_Velocidad(velocidad_inversor, &bus_data);
+    RampaPedal_Send_Velocidad(velocidad_inversor, &bus_data, &bus_can_output);
 }
 
 /***********************************************************************************************************************
@@ -96,8 +98,8 @@ void RAMPA_PEDAL(void)
 /**
  * @brief Rampa pedal para modo ECO
  *
- * @param pedal Pedal de periféricos
- * @return uint8_t Velocidad [0:100]
+ * @param pedal     Pedal de periféricos
+ * @return uint8_t  Velocidad [0:100]
  */
 static uint8_t rampa_eco(rx_var_t pedal) {
 
@@ -130,8 +132,8 @@ static uint8_t rampa_eco(rx_var_t pedal) {
 /**
  * @brief Rampa pedal para modo NORMAL
  *
- * @param pedal Pedal de periféricos
- * @return uint8_t Velocidad [0:100]
+ * @param pedal     Pedal de periféricos
+ * @return uint8_t  Velocidad [0:100]
  */
 static uint8_t rampa_normal(rx_var_t pedal) {
 
@@ -164,8 +166,8 @@ static uint8_t rampa_normal(rx_var_t pedal) {
 /**
  * @brief Rampa pedal para modo SPORT
  *
- * @param pedal Pedal de periféricos
- * @return uint8_t Velocidad [0:100]
+ * @param pedal     Pedal de periféricos
+ * @return uint8_t  Velocidad [0:100]
  */
 static uint8_t rampa_sport(rx_var_t pedal) {
 
@@ -196,22 +198,25 @@ static uint8_t rampa_sport(rx_var_t pedal) {
 }
 
 /**
- * @brief Rampa pedal en caso de hombre muerto presionado
+ * @brief Rampa pedal en caso de hombre muerto presionado.
  *
- * @param pedal Pedal de periféricos
- * @return uint8_t Velocidad
+ * @param pedal     Pedal de periféricos
+ * @return uint8_t  Velocidad [0:100]
  */
 static uint8_t rampa_deadman(rx_var_t pedal) {
     return 0;
 }
 
 /**
- * @brief Envío de velocidad al bus de datos
+ * @brief Envío de velocidad a bus de datos y a bus de salida can.
  *
- * @param to_send       Velocidad a enviar
- * @param p_bus_data    Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param to_send           Velocidad a enviar
+ * @param bus_data          Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida can)
  */
-static void RampaPedal_Send_Velocidad(uint8_t to_send, typedef_bus1_t* p_bus_data)
+static void RampaPedal_Send_Velocidad(uint8_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output)
 {
-    p_bus_data->velocidad_inversor = to_send;
+    bus_data->velocidad_inversor = to_send;
+
+    bus_can_output->nivel_velocidad = to_send;
 }
