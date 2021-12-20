@@ -66,9 +66,9 @@ static var_state_t current_variable_state(rx_var_t D_max, rx_var_t D_min, rx_var
  */
 void VARIABLE_MONITORING(void)
 {
-    bms_variable_monitoring();      // Actualiza estado de las variables del BMS
-    dcdc_variable_monitoring();     // Actualiza estado de las variables del DCDC
-    inversor_variable_monitoring(); // Actualiza estado de las variables del inversor
+    bms_variable_monitoring();          // Actualiza estado de las variables del BMS
+    dcdc_variable_monitoring();         // Actualiza estado de las variables del DCDC
+    inversor_variable_monitoring();     // Actualiza estado de las variables del inversor
 }
 
 /***********************************************************************************************************************
@@ -83,7 +83,7 @@ void VARIABLE_MONITORING(void)
  * en la estructura St_Bms de tipo st_bms_vars_t que se encuentra en el bus_data.
  *
  */
-static void bms_variable_monitoring()
+static void bms_variable_monitoring(void)
 {
     p_St_Bms->voltaje = current_variable_state(V_MAX_BMS, V_MIN_BMS, p_Rx_Bms->voltaje);
 
@@ -106,7 +106,7 @@ static void bms_variable_monitoring()
  * en la estructura St_Dcdc de tipo st_dcdc_vars_t que se encuentra en el bus_data.
  *
  */
-static void dcdc_variable_monitoring()
+static void dcdc_variable_monitoring(void)
 {
     p_St_Dcdc->voltaje_bateria = current_variable_state(V_BAT_MAX_DCDC, V_BAT_MIN_DCDC, p_Rx_Dcdc->voltaje_bateria);
 
@@ -125,7 +125,7 @@ static void dcdc_variable_monitoring()
  * en la estructura de St_Inverosor de tipo st_inversor_vars_t que se encuentra en el bus_data.
  *
  */
-static void inversor_variable_monitoring()
+static void inversor_variable_monitoring(void)
 {
     p_St_Inversor->velocidad = current_variable_state(VEL_MAX_INV, VEL_MIN_INV, p_Rx_Inversor->velocidad);
 

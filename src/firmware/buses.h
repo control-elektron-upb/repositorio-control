@@ -105,6 +105,8 @@ typedef struct bus1
 
     /* Variable velocidad [0:100] */
     uint8_t 				velocidad_inversor;
+
+    /* Variable info del módulo Control */
     module_info_t           control_ok;
 
 } typedef_bus1_t;
@@ -179,8 +181,13 @@ typedef struct bus3
  * Global variables declarations
  **********************************************************************************************************************/
 
+/** @brief Bus 1: Bus de datos */
 extern typedef_bus1_t bus_data;         // puede ser manipulada por otros archivos
+
+/** @brief Bus 2: Bus de transmisión de datos CAN */
 extern typedef_bus2_t bus_can_output;   // puede ser manipulada por otros archivos
+
+/** @brief Bus 3: Bus de recepción de datos CAN */
 extern typedef_bus3_t bus_can_input;    // puede ser manipulada por otros archivos
 
 #endif /* _BUSES_H_ */

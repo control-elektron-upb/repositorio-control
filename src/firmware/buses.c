@@ -29,7 +29,7 @@ typedef_bus1_t bus_data =
     .failure = CAUTION1,
 
     /* Variable velocidad */
-    .velocidad_inversor = 0U,
+    .velocidad_inversor = 0,
 
     /* Variable info de control */
     .control_ok = kInfo_ERROR,
