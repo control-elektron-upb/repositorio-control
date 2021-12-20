@@ -1,7 +1,7 @@
 /**
  * @file peripherals.h
  * @author Subgrupo Control
- * @brief Declaraciones de periféricos de la tarjeta de Control
+ * @brief Declaraciones de periféricos utilizados del microcontrolador
  * @version 0.1
  * @date 2021-12-10
  * 
@@ -16,18 +16,21 @@
  * Included files
  **********************************************************************************************************************/
 
+#include "stm32f4xx_hal.h"
 #include "can_config.h"
+#include "timers.h"
+#include "gpio.h"
 
 /***********************************************************************************************************************
  * Public functions prototypes
  **********************************************************************************************************************/
 
 /**
- * @brief Función de inicialización de los periféricos configurados de la tarjeta de Control.
+ * @brief Función de inicialización de los periféricos a utilizar del microcontrolador.
  * 
  * @param None
  * @retval None
  */
-void Board_Peripherals_Init(void);  // Board peripherals inicialization function
+void BOARD_PERIPHERALS_Init(void);  // Board peripherals inicialization function
 
 #endif

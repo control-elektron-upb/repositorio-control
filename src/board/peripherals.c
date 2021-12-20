@@ -1,7 +1,7 @@
 /**
  * @file peripherals.c
  * @author Subgrupo Control
- * @brief Implementaciones de periféricos de la tarjeta de Control
+ * @brief Implementaciones de periféricos utilizados del microcontrolador
  * @version 0.1
  * @date 2021-12-10
  * 
@@ -20,14 +20,16 @@
  **********************************************************************************************************************/
 
 /**
- * @brief Función de inicialización de los periféricos configurados de la tarjeta de Control.
+ * @brief Función de inicialización de los periféricos a utilizar del microcontrolador.
  * 
  * @param None
  * @retval None
  */
-void Board_Peripherals_Init(void)
+void BOARD_PERIPHERALS_Init(void)
 {
-  /* Initialize components */
-  CAN_Driver_Init();
-  //GPIO_Init();
+  CAN_DRIVER_Init();    // inicializa driver CAN
+
+  GPIO_Init();          // inicializa LEDs, BUZZER
+
+  TIMER_Init();         // inicializa timers
 }
