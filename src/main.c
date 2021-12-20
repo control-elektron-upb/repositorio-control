@@ -50,18 +50,18 @@ int main(void)
 	SystemClock_Config();
 	
 	/* Initialize all configured peripherals */
-	Board_Peripherals_Init();	//GPIO, CAN, ...
+	BOARD_PERIPHERALS_Init();	//GPIO, CAN, Timers ...
 
 	/* Infinite loop */
 	while (1)
 	{
-		//CAN_SEND_DATA();		// En el primer ciclo envia datos por defecto de la inicializaci�n de buses
-		DRIVING_MODES();		// En el primer ciclo se queda en kINIT esperando respuesta
-		//CAN_RECEIVE_DATA();
+		DRIVING_MODES();
 		DECODE_DATA();
 		VARIABLE_MONITORING();
 		FAILURES();
 		RAMPA_PEDAL();
+		
+		CAN_Send(&bus_can_output);
 	}
 
 	return 0;
