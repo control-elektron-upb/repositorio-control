@@ -39,11 +39,9 @@ static void Failures_StateMachine(void);
 
 static void Failures_Get_ModulesStatus(void);
 
-static void Failures_Send_Failure(failure_t to_send, typedef_bus1_t* p_bus_data);
+static void Failures_Send_Failure(failure_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output);
 
-static void Failures_Send_Failure_CAN(failure_t to_send, typedef_bus2_t* p_bus_can_output);
-
-static void Failures_Send_Autokill_CAN(typedef_bus2_t* p_bus_can_output);
+static void Failures_Send_Autokill(typedef_bus2_t* bus_can_output);
 
 static bool Failures_Autokill_Event(void);
 
@@ -85,7 +83,7 @@ void FAILURES(void)
  * @param None
  * @return uint8_t Estado de la máquina de estados
  */
-uint8_t FAILURES_GetState(void)
+uint8_t FAILURES_Get_State(void)
 {
     return failures_state;
 }
@@ -94,29 +92,33 @@ uint8_t FAILURES_GetState(void)
  * Private functions implementation
  **********************************************************************************************************************/
 
- /**
-  * @brief Función máquina de estado de fallas
-  *
-  * Se encarga de realizar transiciones entre diferentes fallas de acuerdo al estado
-  * de las variables del vehículo, con ello establece el tope de modo de manejo. Más
-  * especificamente, la máquina de fallas verifica el estado general de los módulos BMS,
-  * DCDC e inversor y conforme a ello realiza las transiciones entre las diferentes fallas
-  * posibles: OK, CAUTION1, CAUTION2, y AUTOKILL.
-  *
-  * Lee la variable bms_status, dcdc_status e inversor_status de las estructuras de estado de
-  * las variables decodificadas St_Bms, St_Dcdc, y St_Inversor.
-  *
-  * Escribe en la variable failure del bus_data.
-  *
-  */
+/**
+ * @brief Función máquina de estado de fallas
+ *
+ * Se encarga de realizar transiciones entre diferentes fallas de acuerdo al estado
+ * de las variables del vehículo, con ello establece el tope de modo de manejo. Más
+ * especificamente, la máquina de fallas verifica el estado general de los módulos BMS,
+ * DCDC e inversor y conforme a ello realiza las transiciones entre las diferentes fallas
+ * posibles: OK, CAUTION1, CAUTION2, y AUTOKILL.
+ *
+ * Lee la variable bms_status, dcdc_status e inversor_status de las estructuras de estado de
+ * las variables decodificadas St_Bms, St_Dcdc, y St_Inversor, encontradas en el bus_data.
+ *
+ * Escribe en la variable failure del bus_data.
+ * 
+ * Escribe en la variable estado_falla del bus_can_output.
+ * 
+ * Escribe en la variable autokill del bus_can_output.
+ *
+ */
 static void Failures_StateMachine(void)
 {
     switch (failures_state)
     {
     case kOK:
 
-        /* Actualiza falla a OK en bus_data */
-        Failures_Send_Failure(OK, &bus_data);
+        /* Actualiza falla a OK en bus de datos y bus de salida can */
+        Failures_Send_Failure(OK, &bus_data, &bus_can_output);
 
         if (Failures_Autokill_Event()) {
             failures_state = kAUTOKILL;
@@ -137,8 +139,8 @@ static void Failures_StateMachine(void)
 
     case kCAUTION1:
 
-        /* Actualiza falla a CAUTION1 en bus_data */
-        Failures_Send_Failure(CAUTION1, &bus_data);
+        /* Actualiza falla a CAUTION1 en bus de datos y bus de salida can */
+        Failures_Send_Failure(CAUTION1, &bus_data, &bus_can_output);
 
         if (Failures_Autokill_Event()) {
             failures_state = kAUTOKILL;
@@ -159,8 +161,8 @@ static void Failures_StateMachine(void)
 
     case kCAUTION2:
 
-        /* Actualiza falla a CAUTION2 en bus_data */
-        Failures_Send_Failure(CAUTION2, &bus_data);
+        /* Actualiza falla a CAUTION2 en bus de datos y bus de salida can */
+        Failures_Send_Failure(CAUTION2, &bus_data, &bus_can_output);
 
         if (Failures_Autokill_Event()) {
             failures_state = kAUTOKILL;
@@ -175,10 +177,11 @@ static void Failures_StateMachine(void)
 
     case kAUTOKILL:
 
-        /* Actualiza falla a AUTOKILL en bus_data */
-        Failures_Send_Failure(AUTOKILL, &bus_data);
-        /* Luego actualiza variable autokill en bus de salida can y enviar mensaje de maxima prioridad CAN (¿cómo? ¿interrupciones?) */
-        Failures_Send_Autokill_CAN(&bus_can_output);
+        /* Actualiza falla a AUTOKILL en bus de datos y bus de salida can */
+        Failures_Send_Failure(AUTOKILL, &bus_data, &bus_can_output);
+
+        /* Actualiza variable autokill en bus de salida can y enviar mensaje de maxima prioridad CAN (interrupciones?) */
+        Failures_Send_Autokill(&bus_can_output);
         break;
 
     default:
@@ -326,8 +329,8 @@ static var_state_t inversor_current_status(void)
 /**
  * @brief Condición para evento de AUTOKILL
  *
- * @return true Se cumple condición autokill
- * @return false No se cumple condición autokill
+ * @return true     Se cumple condición autokill
+ * @return false    No se cumple condición autokill
  */
 static bool Failures_Autokill_Event(void)
 {
@@ -342,33 +345,38 @@ static bool Failures_Autokill_Event(void)
 }
 
 /**
- * @brief Envío de falla a bus de datos
+ * @brief Envío de falla a bus de datos y a bus de salida can.
  *
- * @param to_send               Falla a enviar
- * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param to_send           Falla a enviar
+ * @param bus_data          Puntero a estructura de tipo typedef_bus1_t (bus de datos)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida can)
  */
-static void Failures_Send_Failure(failure_t to_send, typedef_bus1_t* p_bus_data)
+static void Failures_Send_Failure(failure_t to_send, typedef_bus1_t* bus_data, typedef_bus2_t* bus_can_output)
 {
-    p_bus_data->failure = to_send;
+    bus_data->failure = to_send;
+
+    switch (to_send)
+    {
+    case OK:
+        bus_can_output->estado_falla = CAN_OK;
+        break;
+    case CAUTION1:
+        bus_can_output->estado_falla = CAN_CAUTION_1;
+    case CAUTION2:
+        bus_can_output->estado_falla = CAN_CAUTION_2;
+    case AUTOKILL:
+        bus_can_output->estado_falla = CAN_AUTOKILL;
+    default:
+        break;
+    }
 }
 
 /**
- * @brief Envío de falla a bus de salida CAN
+ * @brief Envío de evento autokill a bus de salida CAN.
  *
- * @param to_send               Falla a enviar
- * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
+ * @param bus_can_output    Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
  */
-static void Failures_Send_Failure_CAN(failure_t to_send, typedef_bus2_t* p_bus_can_output)
+static void Failures_Send_Autokill(typedef_bus2_t* bus_can_output)
 {
-    p_bus_can_output->estado_falla = to_send;
-}
-
-/**
- * @brief Envío de evento autokill a bus de salida CAN
- *
- * @param p_bus_can_output      Puntero a estructura de tipo typedef_bus2_t (bus de salida CAN)
- */
-static void Failures_Send_Autokill_CAN(typedef_bus2_t* p_bus_can_output)
-{
-    p_bus_can_output->autokill = 0x01;
+    bus_can_output->autokill = 0x01;
 }

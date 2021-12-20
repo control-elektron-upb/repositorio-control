@@ -19,6 +19,22 @@
 #include "buses.h"
 
 /***********************************************************************************************************************
+ * Macros
+ **********************************************************************************************************************/
+
+/** @brief Valor CAN para variable estado_falla del bus de salida can */
+#define CAN_OK			0x00
+
+/** @brief Valor CAN para variable estado_falla del bus de salida can */
+#define CAN_CAUTION_1	0x01
+
+/** @brief Valor CAN para variable estado_falla del bus de salida can */
+#define CAN_CAUTION_2	0x02
+
+/** @brief Valor CAN para variable estado_falla del bus de salida can */
+#define CAN_AUTOKILL	0x03
+
+/***********************************************************************************************************************
  * Types declarations
  **********************************************************************************************************************/
 
@@ -59,6 +75,6 @@ void FAILURES(void);
  * @param None
  * @return uint8_t Estado de la máquina de estados
  */
-uint8_t FAILURES_GetState(void);
+uint8_t FAILURES_Get_State(void);
 
 #endif /* _FAILURES_H_ */
